@@ -300,8 +300,8 @@
 
                                 </ul>
                             </li>
-                            <li class="nav-item @yield('sub-cat_dropdown_active')">
-                                <a href="#" class="nav-link @yield('subcat_active')">
+                            <li class="nav-item @yield('product_dropdown_active')">
+                                <a href="#" class="nav-link @yield('product_active')">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Product
@@ -311,15 +311,40 @@
                                 <ul class="nav nav-treeview">
 
                                     <li class="nav-item">
-                                        <a href="{{route('product.index')}}" class="nav-link @yield('subcat_view-active')">
+                                        <a href="{{route('products.index')}}" class="nav-link @yield('product_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View Products</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('product.create')}}" class="nav-link @yield('subcat_add-active')">
+                                        <a href="{{route('products.create')}}" class="nav-link @yield('product_add-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Add Product</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="nav-item @yield('color-size_dropdown_active')">
+                                <a href="#" class="nav-link @yield('color-size_active')">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Colors & Sizes
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('color.index')}}" class="nav-link @yield('color_view-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>View Colors</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('size.index')}}" class="nav-link @yield('size_view-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>View Sizes</p>
                                         </a>
                                     </li>
 

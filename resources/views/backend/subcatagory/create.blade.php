@@ -33,8 +33,8 @@ menu-open
                 <form action="{{route('subcatagory.store')}}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label  for="catagory_id">Sub Catagory</label>
-                        <input value="{{old('subcatagory_name')}}" name="subcatagory_name" type="text" placeholder="SubCatagory Name" autocomplete="none"
+                        <label  for="subcatagory_name">Sub Catagory</label>
+                        <input id="subcatagory_name" value="{{old('subcatagory_name')}}" name="subcatagory_name" type="text" placeholder="SubCatagory Name" autocomplete="none"
                             class="form-control @error('subcatagory_name') is-invalid                                
                             @enderror">
                         @error('subcatagory_name')
@@ -52,12 +52,12 @@ menu-open
                             <option value="{{$catagory->id}}">{{$catagory->catagory_name}}</option>
                             @endforeach
                             
-                            @error('catagory_id')
-                            <div class="alert alert-danger">
-                                {{$message}}
-                            </div>
-                            @enderror
                         </select>
+                        @error('catagory_id')
+                        <div class="alert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">Submit</button>
