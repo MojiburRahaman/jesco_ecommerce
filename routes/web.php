@@ -44,6 +44,9 @@
     Route::get('/product-category/{slug}', [SearchController::class, 'CategorySearch'])->name('CategorySearch');
     // search route end
     // cart route start
+    Route::get('/cart', [CartController::class, 'CartView'])->name('CartView');
+    Route::get('/cart/quantity-delete/{id}', [CartController::class, 'CartDelete'])->name('CartDelete');
+    Route::post('/cart/quantity-update', [CartController::class, 'CartUpdate'])->name('CartUpdate');
     Route::post('/cartpost', [CartController::class, 'CartPost'])->name('CartPost');
 
     // cart route end

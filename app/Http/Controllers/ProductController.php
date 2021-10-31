@@ -58,14 +58,14 @@ class ProductController extends Controller
             'product_name' => ['required', 'string', 'max:250', 'unique:products,title,'],
             'catagory_name' => ['required'],
             'subcatagory_name' => ['required'],
-            'thumbnail_img' => ['required', 'mimes:png,jpeg,jpg', ],
+            'thumbnail_img' => ['required', 'mimes:png,jpeg,jpg',],
             // 'thumbnail_img' => ['required', 'mimes:png,jpeg,jpg', 'dimensions:max_width=300,max_height=200'],
             'product_img.*' => ['required', 'mimes:png,jpeg,jpg'],
             'product_summary' => ['required'],
             'product_description' => ['required'],
             'quantity.*' => ['required'],
             'regular_price.*' => ['required'],
-            'selling_price.*' => ['nullable','numeric','max:99'],
+            'selling_price.*' => ['nullable', 'numeric', 'max:99'],
         ], [
             'product_img.*.mimes' => 'Product Image must be png,jpg,jpeg formate',
             'product_img.*.required' => 'Product Image required',
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 $product_img = Str::slug($request->product_name) . '-' . Str::random(2) . '.' .
                     $value->getClientOriginalExtension();
 
-                Image::make($value)->save(public_path('product_image/' . $product_img), 95);
+                Image::make($value)->save(public_path('product_image/' . $product_img));
                 $gallery = new Gallery;
                 $gallery->product_img = $product_img;
                 $gallery->product_id = $product->id;
@@ -115,7 +115,16 @@ class ProductController extends Controller
             $attribute->size_id = $request->size_id[$key];
             $attribute->quantity = $request->quantity[$key];
             $attribute->regular_price = $request->regular_price[$key];
-            $attribute->sell_price = $request->selling_price[$key];
+
+            if ($request->selling_price[$key] != '') {
+                $regular_price = $request->regular_price[$key];
+                $discount_amount = ($request->regular_price[$key] * $request->selling_price[$key]) / 100;
+                $sell_price = $request->regular_price[$key] - $discount_amount;
+
+                $attribute->sell_price = $sell_price;
+                $attribute->discount = $request->selling_price[$key];
+            }
+
             $attribute->save();
         }
 
@@ -170,7 +179,7 @@ class ProductController extends Controller
             'product_name' => ['required', 'string', 'max:250', 'unique:products,title,' . $id],
             'catagory_name' => ['required'],
             'subcatagory_name' => ['required'],
-            'thumbnail_img' => ['mimes:png,jpg,jpeg', ],
+            'thumbnail_img' => ['mimes:png,jpg,jpeg',],
             // 'thumbnail_img' => ['mimes:png,', 'dimensions:max_width=300,max_height=200'],
             'product_img.*' => ['mimes:png,jpeg,jpg'],
             'product_img_new.*' => ['mimes:png,jpeg,jpg'],
@@ -178,7 +187,7 @@ class ProductController extends Controller
             'product_description' => ['required'],
             'quantity.*' => ['required'],
             'regular_price.*' => ['required'],
-            'selling_price.*' => ['nullable','numeric','max:99','min:2'],
+            'selling_price.*' => ['nullable', 'numeric', 'max:99', 'min:2'],
         ], [
             'product_img_new.*.mimes' => 'Product Image must be png,jpg,jpeg formate',
             'product_img.*.mimes' => 'Product Image must be png,jpg,jpeg formate',
@@ -220,7 +229,7 @@ class ProductController extends Controller
                     $product_img = Str::slug($request->product_name) . '-' . Str::random(3) . '.' .
                         $gallery_image->getClientOriginalExtension();
 
-                    Image::make($gallery_image)->save(public_path('product_image/' . $product_img), 95);
+                    Image::make($gallery_image)->save(public_path('product_image/' . $product_img));
                     $gallery->product_img = $product_img;
                     $gallery->product_id = $product->id;
                     $gallery->save();
@@ -251,7 +260,15 @@ class ProductController extends Controller
                 $attribute->size_id = $request->size_id[$key];
                 $attribute->quantity = $request->quantity[$key];
                 $attribute->regular_price = $request->regular_price[$key];
-                $attribute->sell_price = $request->selling_price[$key];
+
+                if ($request->selling_price[$key] != '') {
+                    $regular_price = $request->regular_price[$key];
+                    $discount_amount = ($request->regular_price[$key] * $request->selling_price[$key]) / 100;
+                    $sell_price = $request->regular_price[$key] - $discount_amount;
+    
+                    $attribute->sell_price = $sell_price;
+                    $attribute->discount = $request->selling_price[$key];
+                }
                 $attribute->save();
             } else {
                 $attribute = new Attribute;
@@ -260,7 +277,15 @@ class ProductController extends Controller
                 $attribute->size_id = $request->size_id[$key];
                 $attribute->quantity = $request->quantity[$key];
                 $attribute->regular_price = $request->regular_price[$key];
-                $attribute->sell_price = $request->selling_price[$key];
+                
+                if ($request->selling_price[$key] != '') {
+                    $regular_price = $request->regular_price[$key];
+                    $discount_amount = ($request->regular_price[$key] * $request->selling_price[$key]) / 100;
+                    $sell_price = $request->regular_price[$key] - $discount_amount;
+    
+                    $attribute->sell_price = $sell_price;
+                    $attribute->discount = $request->selling_price[$key];
+                }
                 $attribute->save();
             }
         }

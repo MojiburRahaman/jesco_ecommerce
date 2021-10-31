@@ -12,4 +12,8 @@ class Color extends Model
     {
         return $this->hasMany(Attribute::class, 'color_id');
     }
+    function Cart()
+    {
+        return $this->hasMany(Cart::class, 'color_id');
+    }
 }

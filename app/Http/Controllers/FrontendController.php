@@ -10,11 +10,11 @@ class FrontendController extends Controller
 {
     function Frontendhome()
     {
-        $product = Product::with('Catagory', 'Attribute')->where('status', 1)->latest()
+        $product = Product::with('Catagory', 'Attribute','Gallery:product_img,product_id')->where('status', 1)->latest()
             ->select('id', 'slug', 'catagory_id', 'thumbnail_img', 'product_summary','title')
             ->get();
         return view('frontend.main', [
-            'latest_product' => $product,
+            'latest_products' => $product,
         ]);
     }
     function Frontendshop()

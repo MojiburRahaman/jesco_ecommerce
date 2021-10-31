@@ -12,4 +12,7 @@ class Size extends Model
     function Attribute(){
         return $this->belongsTo(Attribute::class, 'size_id');
     }
+    function Cart(){
+        return $this->hasMany(Cart::class, 'size_id');
+    }
 }
