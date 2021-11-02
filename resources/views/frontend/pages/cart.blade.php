@@ -42,8 +42,18 @@
     <div class="container">
         <h3 class="cart-page-title">Your cart items</h3>
         <div class="row">
+            @if (session('warning'))
+            <div class="alert alert-warning  fade show" role="alert">
+                <strong>
+                    {{session('warning')}}
+                </strong>
+                </button>
+            </div>
+            @endif
+
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                <form action="#">
+                <form method="post" action="{{route('CartClear')}}">
+                    @csrf
                     <div class="table-content table-responsive cart-table-content">
                         <table>
                             <thead>
@@ -115,9 +125,10 @@
                                         </span>
                                     </td>
                                     <td class="product-remove">
-                                        <a class="pointer"><i data-id="{{$cart->id}}"
+                                        <a class="pointer" title="Update Item"><i data-id="{{$cart->id}}"
                                                 class="rotate fa fa-refresh"></i></a>
-                                        <a href="{{route('CartDelete',$cart->id)}}"><i class="fa fa-times"></i></a>
+                                        <a href="{{route('CartDelete',$cart->id)}}" title="Delete Item"><i
+                                                class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
                                 @empty
@@ -133,15 +144,15 @@
                                     <a href="#">Continue Shopping</a>
                                 </div>
                                 <div class="cart-clear">
-                                    {{-- <button>Update Shopping Cart</button> --}}
-                                    <a href="#">Clear Shopping Cart</a>
+
+                                    <button style="background-color: #fb5d5d;color:white">Clear Shopping Cart</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 mb-lm-30px">
+                    {{-- <div class="col-lg-4 col-md-6 mb-lm-30px">
                         <div class="cart-tax">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax</h4>
@@ -183,22 +194,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-lm-30px">
+                    </div> --}}
+                    <div class="col-lg-6 col-md-6 mb-lm-30px">
                         <div class="discount-code-wrapper">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
                             </div>
                             <div class="discount-code">
                                 <p>Enter your coupon code if you have one.</p>
-                                <form>
-                                    <input type="text" required="" name="name" />
-                                    <button class="cart-btn-2" type="submit">Apply Coupon</button>
-                                </form>
+                                <input id="coupon_name" type="text" required="" name="name" />
+                                <button style="background-color: #fb5d5d;
+                                color:white;
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    line-height: 1;
+                                    padding: 18px 63px 17px;
+                                    text-transform: uppercase;" id="coupon_submit_btn" type="submit">Apply
+                                    Coupon</button>
                             </div>
                         </div>
+
                     </div>
-                    <div class="col-lg-4 col-md-12 mt-md-30px">
+                    <div class="col-lg-6 pl-4 col-md-12 mt-md-30px">
                         <div class="grand-totall">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
@@ -213,7 +230,8 @@
                                     <li><input type="checkbox" /> Express <span>$30.00</span></li>
                                 </ul>
                             </div>
-                            <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
+                            <h4 class="grand-totall-title">Grand Total <span>৳<span
+                                        class="total">{{$total_cart_amount}}</span></span></h4>
                             <a href="checkout.html">Proceed to Checkout</a>
                         </div>
                     </div>
@@ -251,11 +269,21 @@
                    var quantity =  ele.parents("tr").find('.singlesub_price').attr('data-quantity');
                    ele.parents("tr").find(".cart_quantity").val(quantity);
                 $(".subtotal").load(location.href + " .subtotal");
+                $(".total").load(location.href + " .total");
 
                     }
                 }
             })
+    });
 
+
+    $(document).ready(function(){
+        $('#coupon_submit_btn').click(function(){
+            var coupon_name_test = $('#coupon_name').val();
+            var coupon_redirect_url = " {{route('CartView')}}/" + coupon_name_test;
+    window.location.href = coupon_redirect_url;
+    });
+    
     });
 
 </script>

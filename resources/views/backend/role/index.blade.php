@@ -1,11 +1,11 @@
 @extends('backend.master')
-@section('color-size_active')
+@section('role_active')
 active
 @endsection
-@section('size_view-active')
+@section('role_view-active')
 active
 @endsection
-@section('color-size_dropdown_active')
+@section('role_dropdown_active')
 menu-open
 @endsection
 @section('content')
@@ -16,12 +16,12 @@ menu-open
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Sizes</h1>
+                    <h1 class="m-0">Role</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('dashboard.index')}}">Home</a></li>
-                        <li class="breadcrumb-item active">Size</li>
+                        <li class="breadcrumb-item active">Role</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -35,49 +35,56 @@ menu-open
             <div class="col-12">
                 {{-- <form action="{{route('Markdeletebrand')}}" method="post"> --}}
                 @csrf
-                <div class="text-right">
-                    @can('Create Size')
+                @can('Create Role')
 
-                    <a href="{{route('size.create')}}" class="btn-sm btn-info">Add Size</a>
-                    @endcan
+                <div class="text-right">
+                    <a href="{{route('roles.create')}}" class="btn-sm btn-info">Add Role</a>
                 </div>
-                <div class="card-body table-responsive p-0">
+                @endcan
+                <div class="card-body table-responsive table-bordered p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Size Name</th>
+                                <th>Role Name</th>
+                                <th>Permission</th>
                                 <th>Created At</th>
-                                @if (auth()->user()->can('Delete Size') || auth()->user()->can('Edit Size'))
                                 <th>Action</th>
-                                @endif
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($sizes as $size)
+                            @forelse ($roles as $role)
 
                             <tr>
                                 <td>
                                     {{$loop->index+1}}
                                 </td>
-                                <td>{{$size->size_name}}</td>
-                                <td>{{$size->created_at->diffForHumans()}}</td>
-                                @if (auth()->user()->can('Delete Size') || auth()->user()->can('Edit Size'))
-                                <form action="{{route('size.destroy',$size->id)}}" method="post">
+                                <td>{{$role->name}}</td>
+                                <td>
+                                    <ul>
+                                        @foreach ($role->Permissions as $permission)
+                                        <li>
+                                            {{$permission->name}}
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>{{$role->created_at->format('D-M-Y')}}</td>
+                                <form action="{{route('roles.destroy',$role->id)}}" method="post">
                                     <td>
-                                        @can('Edit Size')
-                                        <a style="padding: 7px 8px" href="{{route('size.edit',$size->id)}}"
+                                        @can('Edit Role')
+
+                                        <a style="padding: 7px 8px" href="{{route('roles.edit',$role->id)}}"
                                             class="btn-sm btn-primary">Edit</a>
-                                        @endcans
+                                        @endcan
                                         @csrf
-                                        @can('Delete Size')
+                                        @can('Delete Role')
+
                                         @method('delete')
                                         <button class="btn-sm btn-danger" type="submit">Delete</button>
-
                                         @endcan
                                 </form>
                                 </td>
-                                @endif
                             </tr>
                             @empty
                             <td class="text-center" colspan="10">No Data Available</td>
@@ -86,7 +93,7 @@ menu-open
                     </table>
                 </div>
                 <div class="mt-4">
-                    {{$sizes->links()}}
+                    {{$roles->links()}}
                 </div>
                 <!-- /.card -->
             </div>

@@ -191,7 +191,7 @@
                                 alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="#" class="d-block">Alexander Pierce</a>
+                            <a href="#" class="d-block">{{Auth::user()->name}}</a>
                         </div>
                     </div>
 
@@ -234,6 +234,14 @@
                             </ul>
                         </li> --}}
                             <li class="nav-item">
+                                <a href="{{route('Frontendhome')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Home
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{route('dashboard.index')}}" class="nav-link">
                                     <i class="nav-icon fas fa-th"></i>
                                     <p>
@@ -250,6 +258,7 @@
                                     </p>
                                 </a>
                             </li>
+                            @can('View Category')
                             <li class="nav-item @yield('cat_dropdown_active') ">
                                 <a href="#" class="nav-link @yield('cat_active')">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -259,22 +268,29 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+                                    @can('View Category')
 
                                     <li class="nav-item">
-                                        <a href="{{route('catagory.index')}}" class="nav-link  @yield('cat_view-active')">
+                                        <a href="{{route('catagory.index')}}"
+                                            class="nav-link  @yield('cat_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View Catagory</p>
                                         </a>
                                     </li>
+                                    @endcan
+                                    @can('Create Category')
                                     <li class="nav-item">
-                                        <a href="{{route('catagory.create')}}" class="nav-link @yield('cat_add-active')">
+                                        <a href="{{route('catagory.create')}}"
+                                            class="nav-link @yield('cat_add-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Add Catagory</p>
                                         </a>
                                     </li>
-
+                                    @endcan
                                 </ul>
                             </li>
+                            @endcan
+                            @can('View Sub-Category')
                             <li class="nav-item @yield('sub-cat_dropdown_active')">
                                 <a href="#" class="nav-link @yield('subcat_active')">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -284,22 +300,28 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-
+                                    @can('View Sub-Category')
                                     <li class="nav-item">
-                                        <a href="{{route('subcatagory.index')}}" class="nav-link @yield('subcat_view-active')">
+                                        <a href="{{route('subcatagory.index')}}"
+                                            class="nav-link @yield('subcat_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View SubCatagory</p>
                                         </a>
                                     </li>
+                                    @endcan
+                                    @can('Create Sub-Category')
                                     <li class="nav-item">
-                                        <a href="{{route('subcatagory.create')}}" class="nav-link @yield('subcat_add-active')">
+                                        <a href="{{route('subcatagory.create')}}"
+                                            class="nav-link @yield('subcat_add-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Add SubCatagory</p>
                                         </a>
                                     </li>
-
+                                    @endcan
                                 </ul>
                             </li>
+                            @endcan
+                            @can('View Product')
                             <li class="nav-item @yield('product_dropdown_active')">
                                 <a href="#" class="nav-link @yield('product_active')">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -309,22 +331,28 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-
+                                    @can('View Product')
                                     <li class="nav-item">
-                                        <a href="{{route('products.index')}}" class="nav-link @yield('product_view-active')">
+                                        <a href="{{route('products.index')}}"
+                                            class="nav-link @yield('product_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View Products</p>
                                         </a>
                                     </li>
+                                    @endcan
+                                    @can('Create Product')
                                     <li class="nav-item">
-                                        <a href="{{route('products.create')}}" class="nav-link @yield('product_add-active')">
+                                        <a href="{{route('products.create')}}"
+                                            class="nav-link @yield('product_add-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Add Product</p>
                                         </a>
                                     </li>
-
+                                    @endcan
                                 </ul>
                             </li>
+                            @endcan
+                            @if (auth()->user()->can('View Color') || auth()->user()->can('View Size'))
                             <li class="nav-item @yield('color-size_dropdown_active')">
                                 <a href="#" class="nav-link @yield('color-size_active')">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -334,22 +362,89 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-
+                                    @can('View Color')
                                     <li class="nav-item">
                                         <a href="{{route('color.index')}}" class="nav-link @yield('color_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View Colors</p>
                                         </a>
                                     </li>
+                                    @endcan
+                                    @can('View Size')
                                     <li class="nav-item">
                                         <a href="{{route('size.index')}}" class="nav-link @yield('size_view-active')">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>View Sizes</p>
                                         </a>
                                     </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                            @endif
+                            @can('View Coupon')
+                                
+                            <li class="nav-item">
+                                <a href="{{route('coupons.index')}}" class="nav-link  @yield('coupon_active')">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Coupons
+                                    </p>
+                                </a>
+                            </li>
+                            @endcan
+
+                            @can('View Role')
+
+                            <li class="nav-item @yield('role_dropdown_active')">
+                                <a href="#" class="nav-link @yield('role_active')">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Role Managements
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @can('Create Role')
+                                    <li class="nav-item">
+                                        <a href="{{route('roles.create')}}" class="nav-link @yield('add_role-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Role</p>
+                                        </a>
+                                    </li>
+                                    @endcan
+                                    @can('View Role')
+                                    <li class="nav-item">
+                                        <a href="{{route('roles.index')}}" class="nav-link @yield('role_view-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>View Role</p>
+                                        </a>
+                                    </li>
+                                    @endcan
+                                    <li class="nav-item">
+                                        <a href="{{route('AssignUser')}}" class="nav-link @yield('assign_user_active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Assign User</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('CreateUser')}}" class="nav-link @yield('add_user_active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add User</p>
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </li>
+                            @endcan
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    onclick="event.preventDefault();document.getElementById('from_logout').submit()"
+                                    href="{{ route('logout') }}"><i class="fa fa-key"></i>Log
+                                    out</a>
+                            </li>
+                            <form id="from_logout" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                            </form>
 
                         </ul>
                     </nav>

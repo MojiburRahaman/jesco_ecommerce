@@ -72,13 +72,17 @@ class CartController extends Controller
         } else {
             $price = $Attr->regular_price;
         }
-        // return $price*$request->cart_quantity;
-        // return $price*$cart->quantity;
         $html = '<span class="singlesub_price" data-quantity="' . $request->cart_quantity . '">' . $price * $request->cart_quantity . '</span>';
         return response()->json($html);
     }
-    function CartDelete($id){
+    function CartDelete($id)
+    {
         Cart::findorfail($id)->delete();
         return back();
+    }
+    function CartClear(Request $request)
+    {
+        $carts = Cart::Where('cookie_id', Cookie::get('cookie_id'))->delete();
+        return back()->with('warning','Shopping cart clear successfully');
     }
 }

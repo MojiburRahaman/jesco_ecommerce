@@ -1,14 +1,9 @@
 @extends('backend.master')
-@section('color-size_active')
+@section('coupon_active')
 active
-@endsection
-@section('flavour_view-active')
-active
-@endsection
-@section('color-size_dropdown_active')
-menu-open
 @endsection
 @section('content')
+
 <div class="content-wrapper">
     <!-- Main content -->
     <!-- Content Header (Page header) -->
@@ -16,12 +11,12 @@ menu-open
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Flavours</h1>
+                    <h1 class="m-0">Colors</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('dashboard.index')}}">Home</a></li>
-                        <li class="breadcrumb-item active">Flavour</li>
+                        <li class="breadcrumb-item active">Coupons</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -33,40 +28,55 @@ menu-open
     <section class="content">
         <div class="container-fluid">
             <div class="col-12">
-                {{-- <form action="{{route('Markdeletebrand')}}" method="post"> --}}
                 @csrf
+                @can('Create Coupon')
+
                 <div class="text-right">
 
-                    <a href="{{route('flavour.create')}}" class="btn-sm btn-info">Add Color</a>
+                    <a href="{{route('coupons.create')}}" class="btn-sm btn-info">Add Coupon</a>
                 </div>
+                @endcan
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Flavour Name</th>
-                                <th>Created At</th>
+                                <th>Coupon Name</th>
+                                <th>Expire Date </th>
+                                <th>User limit </th>
+                                @if (auth()->user()->can('Delete Coupon') || auth()->user()->can('Edit Coupon'))
+
                                 <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($flavours as $flavour)
+                            @forelse ($coupons as $coupon)
 
                             <tr>
                                 <td>
                                     {{$loop->index+1}}
                                 </td>
-                                <td>{{$flavour->flavour_name}}</td>
-                                <td>{{$flavour->created_at->diffForHumans()}}</td>
-                                <form action="{{route('flavour.destroy',$flavour->id)}}" method="post">
+                                <td>{{$coupon->coupon_name}}</td>
+                                <td>{{$coupon->coupon_expire_date}}</td>
+                                <td>{{$coupon->coupon_limit}}</td>
+                                @if (auth()->user()->can('Delete Coupon') || auth()->user()->can('Edit Coupon'))
+                                <form action="{{route('coupons.destroy',$coupon->id)}}" method="post">
                                     <td>
-                                        <a style="padding: 7px 8px" href="{{route('flavour.edit',$flavour->id)}}"
+                                        @can('Edit Color')
+
+                                        <a style="padding: 7px 8px" href="{{route('coupons.edit',$coupon->id)}}"
                                             class="btn-sm btn-primary">Edit</a>
+                                        @endcan
                                         @csrf
+                                        @can('Delete Coupon')
                                         @method('delete')
                                         <button class="btn-sm btn-danger" type="submit">Delete</button>
+
+                                        @endcan
                                 </form>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                             <td class="text-center" colspan="10">No Data Available</td>
@@ -75,7 +85,6 @@ menu-open
                     </table>
                 </div>
                 <div class="mt-4">
-                    {{$flavours->links()}}
                 </div>
                 <!-- /.card -->
             </div>
