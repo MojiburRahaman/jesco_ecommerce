@@ -7,15 +7,38 @@ use Illuminate\Support\Facades\Cookie;
 use App\Models\Cart;
 use App\Models\Attribute;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+use App\Models\Coupon;
+use App\Models\Wishlist;
 
 class CartController extends Controller
 {
-    function CartView()
+    function CartView($coupon_name = '')
     {
-        $carts = Cart::with(['Product', 'Product.Attribute', 'Color', 'Size'])->Where('cookie_id', Cookie::get('cookie_id'))->get();
-        return view('frontend.pages.cart', [
-            'Carts' => $carts,
-        ]);
+        $Carts = Cart::with(['Product.Attribute', 'Color', 'Size',])->Where('cookie_id', Cookie::get('cookie_id'))->get();
+        $coupon = Coupon::where('coupon_name', $coupon_name)->first();
+        // $cou = Coupon::where('coupon_name', $coupon_name)->coupon_expire_date;
+        // return $coupon->coupon_expire_date;
+        $current_date = Carbon::today()->format('Y-m-d');
+        // return $coupon->exists();
+        if ($coupon_name == '') {
+            $discount = 0;
+        } else {
+            if ($Carts->count() == '') {
+                // if theres no product in cart
+                return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Product In Your Cart");
+            } elseif (!Coupon::where('coupon_name', $coupon_name)->exists()) {
+                // if theres no coupon name exist 
+                return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Coupon In This Name");
+            } elseif ($current_date > $coupon->coupon_expire_date) {
+                // coupon expire date checking
+                return redirect('/cart/#coupon_section')->with('coupon_invalid', "Coupon Date Expired");
+            } elseif ($coupon->exists()) {
+                // if theres coupon name exist 
+                $discount = $coupon->coupon_amount;
+            }
+        }
+        return view('frontend.pages.cart', compact('Carts', 'discount', 'coupon_name'));
     }
 
     function CartPost(Request $request)
@@ -29,6 +52,11 @@ class CartController extends Controller
             'color_id.required' => 'Please Choose a Color',
             'size_id.required' => 'Please Choose a Size'
         ]);
+
+        if ($request->wish_list_id != '') {
+            Wishlist::findorfail($request->wish_list_id)->delete();
+        }
+
         if ($request->hasCookie('cookie_id')) {
             // if user has cookie
             $cookie_id_generate = $request->cookie('cookie_id');
@@ -45,7 +73,7 @@ class CartController extends Controller
                 ->Where('product_id', $request->product_id)
                 ->Where('size_id', $request->size_id)
                 ->increment('quantity', $request->cart_quantity);
-            return back();
+            return back()->with('cart_added', 'Prodcut add to cart succcessfully');;
         }
         // new data add
         $cart = new Cart;
@@ -55,7 +83,8 @@ class CartController extends Controller
         $cart->color_id = $request->color_id;
         $cart->size_id = $request->size_id;
         $cart->save();
-        return back();
+
+        return back()->with('cart_added', 'Prodcut add to cart succcessfully');
     }
     function CartUpdate(Request $request)
     {
@@ -83,6 +112,6 @@ class CartController extends Controller
     function CartClear(Request $request)
     {
         $carts = Cart::Where('cookie_id', Cookie::get('cookie_id'))->delete();
-        return back()->with('warning','Shopping cart clear successfully');
+        return back()->with('warning', 'Shopping cart clear successfully');
     }
 }

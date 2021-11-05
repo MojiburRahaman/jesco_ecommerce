@@ -20,11 +20,4 @@ class Cart extends Model
    {
       return $this->belongsTo(Size::class, 'size_id');
    }
-   function Attribute($color, $size, $product)
-   {
-      return Attribute::where('color_id', $color)
-         ->where('size_id', $size)
-         ->where('product_id', $product)
-         ->select('regular_price', 'sell_price')->first();
-   }
 }

@@ -30,6 +30,7 @@
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <link rel="stylesheet" href="{{asset("front/assets/css/vendor/vendor.min.css")}}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{asset("front/assets/css/plugins/plugins.min.css")}}" />
     <link rel="stylesheet" href="{{asset('front/assets/css/style.min.css')}}">
 
@@ -132,22 +133,30 @@
                  <!-- Header Action Start -->
                  <div class="col col-lg-auto align-self-center pl-0">
                      <div class="header-actions">
-                         <a href="login.html" class="header-action-btn login-btn" data-bs-toggle="modal"
-                             data-bs-target="#loginActive">Sign In</a>
+                         @auth
+                         <a href="{{route('FrontendProfile')}}" class="header-action-btn login-btn">Profile</a>
+                             @else
+                             <a href="{{route('login')}}" class="header-action-btn login-btn" data-bs-toggle="modal"
+                                 data-bs-target="#loginActive">Sign In</a>
+                         @endauth
                          <!-- Single Wedge Start -->
                          <a href="#" class="header-action-btn" data-bs-toggle="modal" data-bs-target="#searchActive">
                              <i class="pe-7s-search"></i>
                          </a>
                          <!-- Single Wedge End -->
                          <!-- Single Wedge Start -->
+                         @auth
+                             
                          <a href="#offcanvas-wishlist" class="header-action-btn offcanvas-toggle">
                              <i class="pe-7s-like"></i>
+                             <span class="header-action-num">{{wish_list_count()}}</span>
                          </a>
+                         @endauth
                          <!-- Single Wedge End -->
                          <a href="#offcanvas-cart"
                              class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                              <i class="pe-7s-shopbag"></i>
-                             <span class="header-action-num">01</span>
+                             <span class="header-action-num">{{cart_total_product()}}</span>
                              <!-- <span class="cart-amount">€30.00</span> -->
                          </a>
                          <a href="#offcanvas-mobile-menu"
@@ -172,38 +181,46 @@
          </div>
          <div class="body customScroll">
              <ul class="minicart-product-list">
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/1.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Women's Elizabeth Coat</a>
-                         <span class="quantity-price">1 x <span class="amount">$21.86</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/2.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Long sleeve knee length</a>
-                         <span class="quantity-price">1 x <span class="amount">$13.28</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/3.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Cool Man Wearing Leather</a>
-                         <span class="quantity-price">1 x <span class="amount">$17.34</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
+                @forelse (wish_list_products() as $wish_product)
+                @if ($wish_product->status != 2)
+                    
+                <li>
+                   <a href="{{route('SingleProductView',$wish_product->Product->slug)}}">
+                       <img class="img-responsive mr-15px" width="100px" height="130px"
+                           src="{{asset('thumbnail_img/'.$wish_product->Product->thumbnail_img)}}"
+                           alt="{{$wish_product->Product->title}}" />
+                   </a>
+                    <div class="content">
+                        <a href="single-product.html" class="title">{{$wish_product->Product->title}}</a>
+                        <span class="quantity-price">{{$wish_product->quantity}} x <span class="amount">৳
+                           @php
+                           $Attribute =$wish_product->Product->Attribute
+                           ->where('color_id',$wish_product->color_id)
+                           ->where('size_id',$wish_product->size_id);
+                           foreach ($Attribute as $key => $value) {
+                           $regular_price =$value->regular_price;
+                           $sell_price = $value->sell_price;
+                           }
+                           @endphp
+                           {{($sell_price == '')? $regular_price : $sell_price}}
+                            
+                       </span></span>
+                        <a href="{{route('WishlistRemove',$wish_product->id)}}" title="Remove" class="remove">×</a>
+                    </div>
+                </li>
+                @endif
+                @empty
+                <li>
+                    No Item in your cart
+                </li>
+                
+            @endforelse
+               
              </ul>
          </div>
          <div class="foot">
              <div class="buttons">
-                 <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+                 <a href="{{route('WishlistView')}}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
              </div>
          </div>
      </div>
@@ -218,38 +235,46 @@
          </div>
          <div class="body customScroll">
              <ul class="minicart-product-list">
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/1.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Women's Elizabeth Coat</a>
-                         <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/2.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Long sleeve knee length</a>
-                         <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
-                 <li>
-                     <a href="single-product.html" class="image"><img src="assets/images/product-image/3.jpg"
-                             alt="Cart product Image"></a>
-                     <div class="content">
-                         <a href="single-product.html" class="title">Cool Man Wearing Leather</a>
-                         <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
-                         <a href="#" class="remove">×</a>
-                     </div>
-                 </li>
+                 @forelse (cart_product_view() as $cart_product)
+                     @if ($cart_product->status != 2)
+                         
+                     <li>
+                        <a href="{{route('SingleProductView',$cart_product->Product->slug)}}">
+                            <img class="img-responsive mr-15px" width="100px" height="130px"
+                                src="{{asset('thumbnail_img/'.$cart_product->Product->thumbnail_img)}}"
+                                alt="{{$cart_product->Product->title}}" />
+                        </a>
+                         <div class="content">
+                             <a href="single-product.html" class="title">{{$cart_product->Product->title}}</a>
+                             <span class="quantity-price">{{$cart_product->quantity}} x <span class="amount">৳
+                                @php
+                                $Attribute =$cart_product->Product->Attribute
+                                ->where('color_id',$cart_product->color_id)
+                                ->where('size_id',$cart_product->size_id);
+                                foreach ($Attribute as $key => $value) {
+                                $regular_price =$value->regular_price;
+                                $sell_price = $value->sell_price;
+                                }
+                                @endphp
+                                {{($sell_price == '')? $regular_price : $sell_price}}
+                                 
+                            </span></span>
+                             <a href="{{route('CartDelete',$cart_product->id)}}" title="Remove" class="remove">×</a>
+                         </div>
+                     </li>
+                     @endif
+                     @empty
+                     <li>
+                         No Item in your cart
+                     </li>
+                     
+                 @endforelse
              </ul>
          </div>
+             
          <div class="foot">
              <div class="buttons mt-30px">
-                 <a href="cart.html" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
+                 <a href="{{route('CartView')}}" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
                  <a href="checkout.html" class="btn btn-outline-dark current-btn">checkout</a>
              </div>
          </div>
@@ -531,8 +556,8 @@
                             <h2>Log in</h2>
                             <h3>Log in your account</h3>
                             <form action="#">
-                                <input type="text" placeholder="Username">
-                                <input type="password" placeholder="Password">
+                                <input type="email" name="email" placeholder="Email">
+                                <input type="password" name="password" name="password" placeholder="Password">
                                 <div class="remember-forget-wrap">
                                     <div class="remember-wrap">
                                         <input type="checkbox">
@@ -711,6 +736,7 @@
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <script src="{{asset('front/assets/js/vendor/vendor.min.js')}}"></script>
     <script src="{{asset('front/assets/js/plugins/plugins.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Main Js -->
     <script src="{{asset('front/assets/js/main.js')}}"></script>

@@ -47,7 +47,6 @@
                 <strong>
                     {{session('warning')}}
                 </strong>
-                </button>
             </div>
             @endif
 
@@ -100,8 +99,6 @@
                                             @endphp
                                             {{($sell_price == '')? $regular_price : $sell_price}}
                                         </span></td>
-                                    {{-- <td class="product-price-cart"><span class="amount">{{$cart->Attribute($cart->color_id,$cart->size_id,$cart->product_id)}}</span>
-                                    </td> --}}
                                     <td class="product-quantity">
                                         <div class="cart-plus-minus">
                                             <input class="cart-plus-minus-box cart_quantity" type="text"
@@ -109,7 +106,6 @@
                                         </div>
                                     </td>
                                     <td class="product-subtotal">৳
-                                        {{-- {{$cart->cart_quantity}} --}}
                                         <span class="sub_product_total">
                                             @php
                                             if($sell_price == '')
@@ -152,57 +148,15 @@
                     </div>
                 </form>
                 <div class="row">
-                    {{-- <div class="col-lg-4 col-md-6 mb-lm-30px">
-                        <div class="cart-tax">
-                            <div class="title-wrap">
-                                <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax</h4>
-                            </div>
-                            <div class="tax-wrapper">
-                                <p>Enter your destination to get a shipping estimate.</p>
-                                <div class="tax-select-wrapper">
-                                    <div class="tax-select">
-                                        <label>
-                                            * Country
-                                        </label>
-                                        <select class="email s-email s-wid">
-                                            <option>Bangladesh</option>
-                                            <option>Albania</option>
-                                            <option>Åland Islands</option>
-                                            <option>Afghanistan</option>
-                                            <option>Belgium</option>
-                                        </select>
-                                    </div>
-                                    <div class="tax-select">
-                                        <label>
-                                            * Region / State
-                                        </label>
-                                        <select class="email s-email s-wid">
-                                            <option>Bangladesh</option>
-                                            <option>Albania</option>
-                                            <option>Åland Islands</option>
-                                            <option>Afghanistan</option>
-                                            <option>Belgium</option>
-                                        </select>
-                                    </div>
-                                    <div class="tax-select mb-25px">
-                                        <label>
-                                            * Zip/Postal Code
-                                        </label>
-                                        <input type="text" />
-                                    </div>
-                                    <button class="cart-btn-2" type="submit">Get A Quote</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <div class="col-lg-6 col-md-6 mb-lm-30px">
+                    
+                    <div class="col-lg-6 col-md-6 mb-lm-30px" id="coupon_section">
                         <div class="discount-code-wrapper">
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
                             </div>
                             <div class="discount-code">
                                 <p>Enter your coupon code if you have one.</p>
-                                <input id="coupon_name" type="text" required="" name="name" />
+                                <input id="coupon_name" type="text" required="" name="name" value="{{$coupon_name}}" />
                                 <button style="background-color: #fb5d5d;
                                 color:white;
                                     font-size: 14px;
@@ -212,6 +166,9 @@
                                     text-transform: uppercase;" id="coupon_submit_btn" type="submit">Apply
                                     Coupon</button>
                             </div>
+                            @if (session('coupon_invalid'))
+                            <span class="text-danger">{{session('coupon_invalid')}}</span>
+                            @endif
                         </div>
 
                     </div>
@@ -223,16 +180,24 @@
                             <h5>Total products <span>৳
                                     <span class="subtotal">{{$total_cart_amount}}</span>
                                 </span></h5>
-                            <div class="total-shipping">
-                                <h5>Total shipping</h5>
-                                <ul>
-                                    <li><input type="checkbox" /> Standard <span>$20.00</span></li>
-                                    <li><input type="checkbox" /> Express <span>$30.00</span></li>
-                                </ul>
-                            </div>
-                            <h4 class="grand-totall-title">Grand Total <span>৳<span
-                                        class="total">{{$total_cart_amount}}</span></span></h4>
-                            <a href="checkout.html">Proceed to Checkout</a>
+                            <h5>Discount ({{$discount}}%)<span>৳
+                                    <span class="discount">{{round(($total_cart_amount*$discount)/100)}}</span>
+                                </span></h5>
+                           
+                            <h4 class="grand-totall-title">Sub Total <span>৳<span
+                                        class="total">{{round($total_cart_amount - ($total_cart_amount*$discount)/100)}}</span></span>
+                            </h4>
+
+                            @php
+                            session()->put('cart_total',$total_cart_amount);
+                            session()->put('coupon_name',$coupon_name);
+                            session()->put('cart_discount',round(($total_cart_amount * $discount)/100));
+                            session()->put('cart_subtotal',round($total_cart_amount - ($total_cart_amount *
+                            $discount)/100));
+                            @endphp
+
+
+                            <a href="{{route('CheckoutView')}}">Proceed to Checkout</a>
                         </div>
                     </div>
                 </div>
@@ -269,6 +234,7 @@
                    var quantity =  ele.parents("tr").find('.singlesub_price').attr('data-quantity');
                    ele.parents("tr").find(".cart_quantity").val(quantity);
                 $(".subtotal").load(location.href + " .subtotal");
+                $(".discount").load(location.href + " .discount");
                 $(".total").load(location.href + " .total");
 
                     }

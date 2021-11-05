@@ -93,7 +93,7 @@
                         </div>
                         <span class="read-review"><a class="reviews" href="#">( 5 Customer Review )</a></span>
                     </div>
-                    <form action="{{route('CartPost')}}" method="POST">
+                    <form id="Form_submit" action="" method="POST">
                         @csrf
                         @if ($color != '')
                         <div class="pro-details-color-info d-flex align-items-center">
@@ -167,13 +167,30 @@
                                 <input class="cart-plus-minus-box" type="text" name="cart_quantity" value="1" />
                             </div>
                             <div class="pro-details-cart">
-                                <button class="add-cart" href="#"> Add To
+                                <button class="add-cart" id="Cart_add" href="#"> Add To
                                     Cart</button>
                             </div>
                     </form>
+                    <style>
+                        .test {
+                            padding: 0;
+                            border: none;
+                            color: #fff;
+                            font-size: 18px;
+                            margin-left: 10px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            border-radius: 5px;
+                            background-color: #3d3d3d;
+                            width: 50px;
+                            height: 50px;
+                        }
 
+                    </style>
                     <div class="pro-details-compare-wishlist pro-details-wishlist ">
-                        <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                        <button class="test" id="Wish_btn"><i class="pe-7s-like"></i></button>
                     </div>
                     <div class="pro-details-compare-wishlist pro-details-compare">
                         <a href="compare.html"><i class="pe-7s-refresh-2"></i></a>
@@ -382,7 +399,7 @@
             <div class="new-product-wrapper swiper-wrapper">
                 @foreach ($product->Catagory->Product as $latest_product)
                 @if ($product->id != $latest_product->id)
-                <div class="new-product-item  {{(count($product->Catagory->Product) > 3)? 'swiper-slide' : ''}}" 
+                <div class="new-product-item  {{(count($product->Catagory->Product) > 3)? 'swiper-slide' : ''}}"
                     {{(count($product->Catagory->Product) > 3)? '' : 'style=margin-left:30px'}}>
                     <!-- Single Prodect -->
                     <div class="product">
@@ -574,7 +591,20 @@
         });
       // if therese only size available end
 
-
+// add wishlist
+$('#Wish_btn').click(function(){
+        // alert('ok');
+        var action =  '/wishlist-post';
+        $('#Form_submit').attr('action', action);
+        // $('#Form_submit').submit();
+    });
+// add cart
+$('#Cart_add').click(function(){
+        // alert('ok');
+        var action =  '/cartpost';
+        $('#Form_submit').attr('action', action);
+        // $('#Form_submit').submit();
+    });
 
 </script>
 @endsection

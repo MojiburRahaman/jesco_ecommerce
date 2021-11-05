@@ -126,7 +126,13 @@
                         <ul class="product-tab-nav nav align-items-center justify-content-center">
                             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
                                     href="#tab-product--all">All</a></li>
-                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
+                                    @foreach ($catagories->take(5) as $catagory)
+                                        
+                                    <li class="nav-item"><a class="nav-link " data-bs-toggle="tab"
+                                            href="#tab-product--{{$catagory->slug}}">{{$catagory->catagory_name}}</a></li>
+                                    @endforeach
+
+                            {{-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
                                     href="#tab-product--new">New</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
@@ -134,7 +140,7 @@
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
                                     href="#tab-product-women">Women</a></li>
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                    href="#tab-product-kids">Kids</a></li>
+                                    href="#tab-product-kids">Kids</a></li> --}}
                         </ul>
                     </div>
                     <!-- Tab End -->
@@ -151,7 +157,7 @@
                     <div class="tab-pane fade show active" id="tab-product--all">
                         <div class="row">
 
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
+                            {{-- <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
                                 data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
@@ -190,25 +196,32 @@
                                     </div>
                                 </div>
                                 <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
+                            </div> --}}
+                            @foreach ($latest_products as $latest_product)
+                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
+                            data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                     <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
+                                        <a href="{{route('SingleProductView',$latest_product->slug)}}" class="image">
+                                            <img src="{{asset('thumbnail_img/'.$latest_product->thumbnail_img)}}"
+                                                alt="{{$latest_product->title}}" />
                                         </a>
                                         <span class="badges">
-                                            <span class="new">Sale</span>
+                                            @if ($latest_product->Attribute->min('sell_price') != '')
+
+                                            <span
+                                                class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
+                                            @endif
+                                            <span class="new">New</span>
                                         </span>
                                         <div class="actions">
                                             <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
                                                     class="pe-7s-like"></i></a>
                                             <a href="#" class="action quickview" data-link-action="quickview"
                                                 title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
+                                                data-bs-target="#latest_product{{$latest_product->id}}"><i
+                                                    class="pe-7s-search"></i></a>
                                             <a href="compare.html" class="action compare" title="Compare"><i
                                                     class="pe-7s-refresh-2"></i></a>
                                         </div>
@@ -218,227 +231,121 @@
                                     <div class="content">
                                         <span class="ratings">
                                             <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
+                                                <span class="star" style="width: 100%"></span>
                                             </span>
-                                            <span class="rating-num">( 3 Review )</span>
+                                            <span class="rating-num">( 5 Review )</span>
                                         </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
+                                        <h5 class="title"><a
+                                                href="{{route('SingleProductView',$latest_product->slug)}}">{{$latest_product->title}}
+                                            </a>
+                                        </h5>
                                         <span class="price">
-                                            <span class="new">$38.50</span>
+                                            @php
+                                            $regular_price =
+                                            collect($latest_product->Attribute)->min('regular_price');
+                                            $sell_price = collect($latest_product->Attribute)->min('sell_price');
+                                            @endphp
+                                            @if ($sell_price != '')
+
+                                            <span class="new">৳
+                                                {{$sell_price}}
+                                            </span>
+                                            @else
+                                            ৳{{$regular_price}}
+
+                                            @endif
+                                            @if ($sell_price != '')
+                                            &nbsp; <span class="new">
+                                                <del>
+                                                    ৳{{$regular_price}}
+                                                </del>
+                                            </span>
+                                            @endif
                                         </span>
                                     </div>
                                 </div>
-                                <!-- Single Prodect -->
                             </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
+
+                            @endforeach
                         </div>
                     </div>
                     <!-- 1st tab end -->
                     <!-- 2nd tab start -->
-                    <div class="tab-pane fade" id="tab-product--new">
+                    @foreach ($catagories->take(5) as $catagory)
+                    <div class="tab-pane fade" id="tab-product--{{$catagory->slug}}">
                         <div class="row">
 
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
+                            @foreach ($catagory->Product as $latest_product)
+                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
+                            data-aos-delay="800">
+                                <!-- Single Prodect -->
+                                <div class="product">
+                                    <div class="thumb">
+                                        <a href="{{route('SingleProductView',$latest_product->slug)}}" class="image">
+                                            <img src="{{asset('thumbnail_img/'.$latest_product->thumbnail_img)}}"
+                                                alt="{{$latest_product->title}}" />
+                                        </a>
+                                        <span class="badges">
+                                            @if ($latest_product->Attribute->min('sell_price') != '')
+
+                                            <span
+                                                class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
+                                            @endif
+                                            <span class="new">New</span>
+                                        </span>
+                                        <div class="actions">
+                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
+                                                    class="pe-7s-like"></i></a>
+                                            <a href="#" class="action quickview" data-link-action="quickview"
+                                                title="Quick view" data-bs-toggle="modal"
+                                                data-bs-target="#latest_product{{$latest_product->id}}"><i
+                                                    class="pe-7s-search"></i></a>
+                                            <a href="compare.html" class="action compare" title="Compare"><i
+                                                    class="pe-7s-refresh-2"></i></a>
+                                        </div>
+                                        <button title="Add To Cart" class=" add-to-cart">Add
+                                            To Cart</button>
+                                    </div>
+                                    <div class="content">
+                                        <span class="ratings">
+                                            <span class="rating-wrap">
+                                                <span class="star" style="width: 100%"></span>
+                                            </span>
+                                            <span class="rating-num">( 5 Review )</span>
+                                        </span>
+                                        <h5 class="title"><a
+                                                href="{{route('SingleProductView',$latest_product->slug)}}">{{$latest_product->title}}
+                                            </a>
+                                        </h5>
+                                        <span class="price">
+                                            @php
+                                            $regular_price =
+                                            collect($latest_product->Attribute)->min('regular_price');
+                                            $sell_price = collect($latest_product->Attribute)->min('sell_price');
+                                            @endphp
+                                            @if ($sell_price != '')
+
+                                            <span class="new">৳
+                                                {{$sell_price}}
+                                            </span>
+                                            @else
+                                            ৳{{$regular_price}}
+
+                                            @endif
+                                            @if ($sell_price != '')
+                                            &nbsp; <span class="new">
+                                                <del>
+                                                    ৳{{$regular_price}}
+                                                </del>
+                                            </span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @endforeach
+                            {{-- <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
                                 data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
@@ -677,51 +584,12 @@
                                     </div>
                                 </div>
                                 <!-- Single Prodect -->
-                            </div>
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
+                    @endforeach
                     <!-- 2nd tab end -->
-                    <!-- 3rd tab start -->
+                    {{-- <!-- 3rd tab start -->
                     <div class="tab-pane fade" id="tab-product-men">
                         <div class="row">
 
@@ -1581,7 +1449,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 5th tab end -->
+                    <!-- 5th tab end --> --}}
                 </div>
                 <a href="shop-left-sidebar.html" class="btn btn-lg btn-primary btn-hover-dark m-auto"> Load More <i
                         class="fa fa-arrow-right ml-15px" aria-hidden="true"></i></a>

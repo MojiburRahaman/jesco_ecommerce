@@ -16,4 +16,8 @@ class Color extends Model
     {
         return $this->hasMany(Cart::class, 'color_id');
     }
+    function Wishlist()
+    {
+        return $this->hasMany(Wishlist::class, 'color_id');
+    }
 }

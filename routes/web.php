@@ -5,6 +5,7 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\DashboardController;
     use App\Http\Controllers\CatagoryController;
+    use App\Http\Controllers\CheckoutController;
     use App\Http\Controllers\ColorController;
     use App\Http\Controllers\CouponController;
     use App\Http\Controllers\FlavourController;
@@ -15,6 +16,7 @@
     use App\Http\Controllers\SearchController;
     use App\Http\Controllers\SizeController;
     use App\Http\Controllers\SubCatagoryController;
+    use App\Http\Controllers\WishlistController;
 
     /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,7 @@
     // search route start
     Route::get('/product-category/{slug}', [SearchController::class, 'CategorySearch'])->name('CategorySearch');
     // search route end
+
     // cart route start
     Route::get('/cart', [CartController::class, 'CartView'])->name('CartView');
     Route::get('/cart/{coupon_name}', [CartController::class, 'CartView']);
@@ -54,13 +57,31 @@
     Route::post('/cartpost', [CartController::class, 'CartPost'])->name('CartPost');
 
     // cart route end
+    Route::middleware(['auth', 'checkcoustomer'])->group(function () {
+        // Profile route
+        Route::get('/profile', [FrontendController::class, 'FrontendProfile'])->name('FrontendProfile');
+        // wishlist route start
+        Route::get('/wishlist', [WishlistController::class, 'WishlistView'])->name('WishlistView');
+        Route::post('/wishlist-post', [WishlistController::class, 'WishlistPost'])->name('WishlistPost');
+        Route::get('/wishlist-remove/{id}', [WishlistController::class, 'WishlistRemove'])->name('WishlistRemove');
+        // wishlist route end
 
+        // checkout route start
+        Route::get('/checkout', [CheckoutController::class, 'CheckoutView'])->name('CheckoutView');
+        Route::post('/checkout-post', [CheckoutController::class, 'CheckoutPost'])->name('CheckoutPost');
+
+        Route::post('/checkout/billing/division_id', [CheckoutController::class, 'CheckoutajaxDivid'])->name('CheckoutajaxDivid');
+        Route::post('/checkout/billing/disctrict_id', [CheckoutController::class, 'CheckoutajaxDistrictid'])->name('CheckoutajaxDistrictid');
+
+        // checkout route end
+
+    });
 
     // frontend route end
 
 
     // backend route start
-    Route::middleware(['auth','checkadminpanel'])->group(function () {
+    Route::middleware(['auth', 'checkadminpanel'])->group(function () {
         // dashboard route
         Route::resource('dashboard', DashboardController::class);
 
