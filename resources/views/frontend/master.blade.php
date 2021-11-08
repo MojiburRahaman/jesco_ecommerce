@@ -7,12 +7,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="robots" content="index, follow" />
-    <title>Jesco - Fashoin eCommerce HTML Template</title>
+    <title>@yield('title')</title>
     <meta name="csrf-token" content="{{csrf_token()}}">
-    <meta name="description" content="Jesco - Fashoin eCommerce HTML Template" />
+    <meta name="description" content="@yield('meta_description')" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <!-- Add site Favicon -->
+    <link rel="canonical" href="{{url()->current()}}">
     <link rel="shortcut icon" href="assets/images/favicon/favicon.ico" type="image/png">
 
 
@@ -532,9 +533,9 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <h2>Search Your Product</h2>
-                        <form class="navbar-form position-relative" role="search">
+                        <form action="{{route('Frontendhome')}}" method="GET" class="navbar-form position-relative" role="search">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search here...">
+                                <input type="text" name="search" class="form-control" placeholder="Search here...">
                             </div>
                             <button type="submit" class="submit-btn"><i class="pe-7s-search"></i></button>
                         </form>
@@ -555,7 +556,8 @@
                         <div class="login-content">
                             <h2>Log in</h2>
                             <h3>Log in your account</h3>
-                            <form action="#">
+                            <form action="{{route('login')}}" method="POST">
+                                @csrf
                                 <input type="email" name="email" placeholder="Email">
                                 <input type="password" name="password" name="password" placeholder="Password">
                                 <div class="remember-forget-wrap">
@@ -568,7 +570,7 @@
                                         <a href="#">Forgot your password?</a>
                                     </div>
                                 </div>
-                                <button type="button">Log in</button>
+                                <button type="submit">Log in</button>
                                 <div class="member-register">
                                     <p> Not a member? <a href="login.html"> Register now</a></p>
                                 </div>

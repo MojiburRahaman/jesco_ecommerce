@@ -11,13 +11,17 @@ class SearchController extends Controller
     function CategorySearch($slug)
     {
         // return $slug;
-        $category = Catagory::where('slug', $slug)->select('id', 'catagory_name')->first();
-        $Products = Product::with('Attribute', 'Catagory:id,catagory_name')->where('catagory_id', $category->id)->latest()->simplepaginate();
-        $categories = Catagory::select('slug', 'catagory_name')->get();
-        return view('frontend.search.category', [
-            'Products' => $Products,
-            'Categories' => $categories,
+        $search = $slug;
+        $category = Catagory::where('slug', $search)->select('id', 'catagory_name')->first();
+        $Products = Product::with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
+            ->where('catagory_id', $category->id)
+            ->latest()->simplepaginate();
+        $categories = Catagory::select('slug', 'id', 'catagory_name')->withcount('Product')->latest()->get();
+        return view('frontend.pages.search', [
+            'products' => $Products,
+            'catagories' => $categories,
             'category' => $category,
+            'search' => $search,
         ]);
     }
 }

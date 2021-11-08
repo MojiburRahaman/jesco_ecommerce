@@ -1,6 +1,7 @@
  <?php
 
-    use App\Http\Controllers\BrandController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BrandController;
     use App\Http\Controllers\CartController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\DashboardController;
@@ -115,6 +116,8 @@
         Route::resource('/color', ColorController::class);
         // size route
         Route::resource('/size', SizeController::class);
+        // 
+        Route::resource('/blogs', BlogController::class);
     });
 
 

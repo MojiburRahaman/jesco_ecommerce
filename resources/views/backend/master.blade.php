@@ -436,6 +436,32 @@
                                 </ul>
                             </li>
                             @endcan
+                            <li class="nav-item @yield('blog_dropdown_active')">
+                                <a href="#" class="nav-link @yield('blog_active')">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Blogs
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('blogs.create')}}" class="nav-link @yield('add_blog-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Create Blog</p>
+                                        </a>
+                                    </li>
+                                
+                                    <li class="nav-item">
+                                        <a href="{{route('blogs.index')}}" class="nav-link @yield('view_blog-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>View Blogs</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link"
                                     onclick="event.preventDefault();document.getElementById('from_logout').submit()"
@@ -483,6 +509,7 @@
         <script src="{{asset('backend/dist/js/adminlte.js')}}"></script>
 
         <!-- PAGE PLUGINS -->
+        <script src="https://cdn.ckeditor.com/ckeditor5/31.0.0/classic/ckeditor.js"></script>
         <!-- jQuery Mapael -->
         <script src="{{asset('backend/plugins/jquery-mousewheel/jquery.mousewheel.js')}}"></script>
         <script src="{{asset('backedn/plugins/raphael/raphael.min.js')}}"></script>
