@@ -17,7 +17,7 @@ class CatagoryController extends Controller
     public function index()
     {
         if (auth()->user()->can('View Category')) {
-            $catagoreis = Catagory::select('id', 'catagory_name', 'created_at')->latest('id')->get();
+            $catagoreis = Catagory::select('id', 'catagory_name', 'created_at')->latest('id')->paginate();
             return view('backend.catagory.index', [
                 'catagoreis' => $catagoreis,
             ]);

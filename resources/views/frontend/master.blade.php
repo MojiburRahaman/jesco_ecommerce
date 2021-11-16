@@ -119,13 +119,8 @@
                                      </li>
                                  </ul>
                              </li>
-                             <li class="dropdown "><a href="#">Blogs <i class="pe-7s-angle-down"></i></a>
-                                 <ul class="sub-menu">
-                                     <li><a href="blog-grid.html">Blog Grid Page</a></li>
-                                     <li><a href="blog-single.html">Blog Single Page</a></li>
-                                 </ul>
-                             </li>
-                             <li><a href="about.html">About us</a></li>
+                                <li><a href="{{route('Frontendblog')}}">Blogs</a></li>
+                                <li><a href="about.html">About us</a></li>
                              <li><a href="contact.html">Contact us</a></li>
                              <li><a href="{{route('CartView')}}">Cart</a></li>
                          </ul>

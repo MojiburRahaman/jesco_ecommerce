@@ -96,7 +96,7 @@ class ProductController extends Controller
             if ($request->hasFile('thumbnail_img')) {
                 $product_thumbnail = $request->file('thumbnail_img');
                 $extension = Str::slug($request->product_name) . '-' . Str::random(1) . '.' . $product_thumbnail->getClientOriginalExtension();
-                Image::make($product_thumbnail)->save(public_path('thumbnail_img/' . $extension), 80);
+                Image::make($product_thumbnail)->save(public_path('thumbnail_img/' . $extension));
             }
             $product->thumbnail_img = $extension;
             $product->save();
@@ -233,7 +233,7 @@ class ProductController extends Controller
                 }
                 $product_thumbnail = $request->file('thumbnail_img');
                 $extension = Str::slug($request->product_name) . '-' . Str::random(1) . '.' . $product_thumbnail->getClientOriginalExtension();
-                Image::make($product_thumbnail)->save(public_path('thumbnail_img/' . $extension), 70);
+                Image::make($product_thumbnail)->save(public_path('thumbnail_img/' . $extension));
 
                 $product->thumbnail_img = $extension;
             }

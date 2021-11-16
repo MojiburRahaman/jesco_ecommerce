@@ -217,7 +217,7 @@ menu-open
             if ($catagory_id) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('/products/get-sub-cat/') }}/" + $catagory_id,
+                    url: "{{ url('admin/products/get-sub-cat/') }}/" + $catagory_id,
                     //  url: "{{ url('get/size/price') }}/" + color_id + '/' + product_id,
 
                     success: function(res) {
@@ -328,7 +328,14 @@ menu-open
         });
 
 
-
+        ClassicEditor
+            .create( document.querySelector( '#product_description' ) )
+            .then( editor => {
+                    console.log( editor );
+            } )
+            .catch( error => {
+                    console.error( error );
+            } );
 
 
 </script>

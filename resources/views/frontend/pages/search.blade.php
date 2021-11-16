@@ -674,10 +674,10 @@ Search Result for "{{$search}}"
                     <!--  Pagination Area Start -->
                     <br>
                     <br>
-                    <div class="load-more-items text-center mb-md-60px mb-lm-60px mt-30px0px" data-aos="fade-up">
+                    {{-- <div class="load-more-items text-center mb-md-60px mb-lm-60px mt-30px0px" data-aos="fade-up">
                         <a href="#" class="btn btn-lg btn-primary btn-hover-dark m-auto"> Load More <i
                                 class="fa fa-refresh ml-15px" aria-hidden="true"></i></a>
-                    </div>
+                    </div> --}}
                     <!--  Pagination Area End -->
                 </div>
                 <!-- Shop Bottom Area End -->

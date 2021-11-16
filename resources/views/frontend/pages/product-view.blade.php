@@ -207,7 +207,7 @@
                     <span>Categories: </span>
                     <ul class="d-flex">
                         <li>
-                            <a href="#">{{$product->Catagory->catagory_name}}</a>
+                            <a href="{{route('CategorySearch',$product->Catagory->catagory_name)}}">{{$product->Catagory->catagory_name}}</a>
                         </li>
                     </ul>
                 </div>

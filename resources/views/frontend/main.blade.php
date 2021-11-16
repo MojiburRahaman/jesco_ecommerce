@@ -132,11 +132,12 @@ Home
                         <ul class="product-tab-nav nav align-items-center justify-content-center">
                             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
                                     href="#tab-product--all">All</a></li>
-                                    @foreach ($catagories->take(5) as $catagory)
-                                        
-                                    <li class="nav-item"><a class="nav-link " data-bs-toggle="tab"
-                                            href="#tab-product--{{$catagory->slug}}">{{$catagory->catagory_name}}</a></li>
-                                    @endforeach
+                            @foreach ($catagories->take(5) as $catagory)
+                            @if ($catagory->product_count != '')
+                            <li class="nav-item"><a class="nav-link " data-bs-toggle="tab"
+                                    href="#tab-product--{{$catagory->slug}}">{{$catagory->catagory_name}}</a></li>
+                            @endif
+                            @endforeach
 
                             {{-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
                                     href="#tab-product--new">New</a>
@@ -162,50 +163,9 @@ Home
                     <!-- 1st tab start -->
                     <div class="tab-pane fade show active" id="tab-product--all">
                         <div class="row">
-
-                            {{-- <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 " data-aos="fade-up"
-                                data-aos-delay="800">
-                                <!-- Single Prodect -->
-                                <div class="product">
-                                    <div class="thumb">
-                                        <a href="single-product.html" class="image">
-                                            <img src="{{asset('front/assets/images/product-image/8.jpg')}}"
-                                                alt="Product" />
-                                        </a>
-                                        <span class="badges">
-                                            <span class="new">Sale</span>
-                                        </span>
-                                        <div class="actions">
-                                            <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
-                                            <a href="#" class="action quickview" data-link-action="quickview"
-                                                title="Quick view" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"><i class="pe-7s-search"></i></a>
-                                            <a href="compare.html" class="action compare" title="Compare"><i
-                                                    class="pe-7s-refresh-2"></i></a>
-                                        </div>
-                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                            To Cart</button>
-                                    </div>
-                                    <div class="content">
-                                        <span class="ratings">
-                                            <span class="rating-wrap">
-                                                <span class="star" style="width: 60%"></span>
-                                            </span>
-                                            <span class="rating-num">( 3 Review )</span>
-                                        </span>
-                                        <h5 class="title"><a href="single-product.html">Long sleeve knee
-                                                length</a></h5>
-                                        <span class="price">
-                                            <span class="new">$38.50</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- Single Prodect -->
-                            </div> --}}
                             @foreach ($latest_products as $latest_product)
                             <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
-                            data-aos-delay="800">
+                                data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                     <div class="thumb">
@@ -216,8 +176,7 @@ Home
                                         <span class="badges">
                                             @if ($latest_product->Attribute->min('sell_price') != '')
 
-                                            <span
-                                                class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
+                                            <span class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
                                             @endif
                                             <span class="new">New</span>
                                         </span>
@@ -283,7 +242,7 @@ Home
 
                             @foreach ($catagory->Product as $latest_product)
                             <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
-                            data-aos-delay="800">
+                                data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                     <div class="thumb">
@@ -294,14 +253,13 @@ Home
                                         <span class="badges">
                                             @if ($latest_product->Attribute->min('sell_price') != '')
 
-                                            <span
-                                                class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
+                                            <span class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
                                             @endif
                                             <span class="new">New</span>
                                         </span>
                                         <div class="actions">
-                                            <a href="{{route('SingleProductView',$latest_product->slug)}}" class="action wishlist" title="Wishlist"><i
-                                                    class="pe-7s-like"></i></a>
+                                            <a href="{{route('SingleProductView',$latest_product->slug)}}"
+                                                class="action wishlist" title="Wishlist"><i class="pe-7s-like"></i></a>
                                             <a href="#" class="action quickview" data-link-action="quickview"
                                                 title="Quick view" data-bs-toggle="modal"
                                                 data-bs-target="#latest_product{{$latest_product->id}}"><i
@@ -446,7 +404,8 @@ Home
                                     <!-- Single Prodect -->
                                     <div class="product">
                                         <div class="thumb">
-                                            <a href="{{route('SingleProductView',$latest_product->slug)}}" class="image">
+                                            <a href="{{route('SingleProductView',$latest_product->slug)}}"
+                                                class="image">
                                                 <img src="{{asset('thumbnail_img/'.$latest_product->thumbnail_img)}}"
                                                     alt="{{$latest_product->title}}" />
                                             </a>
@@ -560,37 +519,52 @@ Home
             <div class="col-md-12">
                 <div class="section-title text-center mb-30px0px">
                     <h2 class="title">#blog</h2>
-                    <p class="sub-title">Lorem ipsum dolor sit amet consectetur adipisicing eiusmod.
+                    {{-- <p class="sub-title">Lorem ipsum dolor sit amet consectetur adipisicing eiusmod. --}}
                     </p>
                 </div>
             </div>
         </div>
         <!-- section title start -->
-
         <div class="row">
+            @forelse ($blogs->take(3) as $blog )
+
             <div class="col-lg-4 mb-md-30px mb-lm-30px">
                 <div class="single-blog">
                     <div class="blog-image">
-                        <a href="blog-single-left-sidebar.html"><img src="assets/images/blog-image/1.jpg"
-                                class="img-responsive w-100" alt=""></a>
+                        <a href="{{route('FrontenblogView',$blog->slug)}}"><img
+                                src="{{asset('blog/thumbnail/'.$blog->blog_thumbnail)}}" class="img-responsive w-100"
+                                alt="{{$blog->title}}"></a>
                     </div>
                     <div class="blog-text">
                         <div class="blog-athor-date">
                             <a class="blog-date height-shape" href="#"><i class="fa fa-calendar" aria-hidden="true"></i>
-                                24 Aug, 2021</a>
-                            <a class="blog-mosion" href="#"><i class="fa fa-commenting" aria-hidden="true"></i> 1.5
-                                K</a>
+                                {{$blog->created_at->format('d M,y')}}
+                            </a>
+                            <a class="blog-mosion" href="#"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                @php
+                                $comment =$blog->blog_reply_count + $blog->blog_comment_count
+                                @endphp
+                                @if ($comment > 999)
+                                {{number_format($comment,2)}}k
+                                @else
+                                {{$comment}}
+                                @endif
+                            </a>
                         </div>
-                        <h5 class="blog-heading"><a class="blog-heading-link" href="blog-single-left-sidebar.html">There
-                                are many variations of
-                                passages of Lorem</a></h5>
+                        <h5 class="blog-heading"><a class="blog-heading-link"
+                                href="{{route('FrontenblogView',$blog->slug)}}">
+                                {{$blog->title}}
+                            </a></h5>
 
-                        <a href="blog-single-left-sidebar.html" class="btn btn-primary blog-btn"> Read More<i
+                        <a href="{{route('FrontenblogView',$blog->slug)}}" class="btn btn-primary blog-btn"> Read More<i
                                 class="fa fa-arrow-right ml-5px" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
-            <!-- End single blog -->
+            @empty
+
+            @endforelse
+            {{-- <!-- End single blog -->
             <div class="col-lg-4 mb-md-30px mb-lm-30px">
                 <div class="single-blog ">
                     <div class="blog-image">
@@ -636,7 +610,7 @@ Home
                                 class="fa fa-arrow-right ml-5px" aria-hidden="true"></i></a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- End single blog -->
         </div>
     </div>
@@ -721,7 +695,8 @@ Home
                                     <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                                 </div>
                                 <div class="pro-details-cart">
-                                    <a href="{{route('SingleProductView',$latest_product->slug)}}" class="add-cart" href="#"> Add To
+                                    <a href="{{route('SingleProductView',$latest_product->slug)}}" class="add-cart"
+                                        href="#"> Add To
                                         Cart</a>
                                 </div>
                                 <div class="pro-details-compare-wishlist pro-details-wishlist ">

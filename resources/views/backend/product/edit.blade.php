@@ -260,7 +260,7 @@ menu-open
             if ($catagory_id) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('/products/get-sub-cat/') }}/" + $catagory_id,
+                    url: "{{ url('admin/products/get-sub-cat/') }}/" + $catagory_id,
                     //  url: "{{ url('get/size/price') }}/" + color_id + '/' + product_id,
 
                     success: function(res) {
@@ -284,26 +284,6 @@ menu-open
                         }
         });
 
-        
-        
-    //     $("#addRow").click(function () {
-    //     var html = '';
-    //     html += '<div id="inputFormRow">';
-    //     html += '<div class="input-group mb-3">';
-    //     html += '<input type="hidden" name="flavour_id[]">';
-    //     html += '<input type="text" name="flavour_name[]" class="form-control m-input " placeholder="Enter Flavour Name" autocomplete="off">';
-    //     html += '<div class="input-group-append">';
-    //     html += '<a id="removeRow" type="button" class="btn btn-danger">Remove</a>';
-    //     html += '</div>';
-    //     html += '</div>';
-
-    //     $('#newRow').append(html);
-    // });
-
-    // remove row
-    $(document).on('click', '#removeRow', function () {
-        $(this).closest('#inputFormRow').remove();
-    });
 
 
 
@@ -380,7 +360,14 @@ menu-open
             });
         });
 
-
+        ClassicEditor
+            .create( document.querySelector( '#product_description' ) )
+            .then( editor => {
+                    console.log( editor );
+            } )
+            .catch( error => {
+                    console.error( error );
+            } );
 
 
 

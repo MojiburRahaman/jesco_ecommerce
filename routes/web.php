@@ -1,7 +1,7 @@
  <?php
 
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\BrandController;
+    use App\Http\Controllers\BlogController;
+    use App\Http\Controllers\BrandController;
     use App\Http\Controllers\CartController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\DashboardController;
@@ -45,6 +45,13 @@ use App\Http\Controllers\BrandController;
     Route::post('/product/get-pricebysize', [ProductViewController::class, 'GetPriceBySize'])->name('GetPriceBySize');
     Route::get('/shop', [FrontendController::class, 'Frontendshop'])->name('Frontendshop');
 
+    // blog route
+    Route::get('/blogs', [FrontendController::class, 'Frontendblog'])->name('Frontendblog');
+    Route::get('/blog/{slug}', [FrontendController::class, 'FrontenblogView'])->name('FrontenblogView');
+    Route::post('/blog/comment', [FrontendController::class, 'BlogComment'])->name('BlogComment');
+    Route::post('/blog/reply', [FrontendController::class, 'BlogReply'])->name('BlogReply');
+
+
     // search route start
     Route::get('/product-category/{slug}', [SearchController::class, 'CategorySearch'])->name('CategorySearch');
     // search route end
@@ -82,9 +89,9 @@ use App\Http\Controllers\BrandController;
 
 
     // backend route start
-    Route::middleware(['auth', 'checkadminpanel'])->group(function () {
+    Route::middleware(['auth', 'checkadminpanel'])->prefix('admin')->group(function () {
         // dashboard route
-        Route::resource('dashboard', DashboardController::class);
+        Route::resource('/dashboard', DashboardController::class);
 
         // catagory route
         Route::post('/catagory/mark-delete', [CatagoryController::class, 'MarkdeleteCatagory'])->name('MarkdeleteCatagory');
@@ -117,7 +124,7 @@ use App\Http\Controllers\BrandController;
         // size route
         Route::resource('/size', SizeController::class);
         // 
-        Route::resource('/blogs', BlogController::class);
+        Route::resource('/admin/blogs', BlogController::class);
     });
 
 

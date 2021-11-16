@@ -6,7 +6,7 @@ menu-open
 @section('blog_active')
 active
 @endsection
-@section('view_blog-active')
+@section('add_blog-active')
 active
 @endsection
 @section('content')
@@ -32,7 +32,7 @@ active
                 <form action="{{route('blogs.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="title">Blog Title</label>
+                        <label for="title">Title</label>
                         <input id="title" name="title" type="text" placeholder="Title" autocomplete="none" class="form-control @error('title') is-invalid                                
                             @enderror">
                         @error('title')
