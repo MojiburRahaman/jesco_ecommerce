@@ -65,8 +65,7 @@
                             $regular_price =collect($product->Attribute)->min('regular_price');
                             $sell_price = collect($product->Attribute)->min('sell_price');
                             @endphp
-
-
+                            
                             @if ($sell_price != '')
                             <span class="new   ">৳
                                 <span class="sell_Price">

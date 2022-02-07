@@ -21,6 +21,7 @@ class CreateOrderSummariesTable extends Migration
             $table->integer('discount');
             $table->integer('subtotal');
             $table->integer('shipping');
+            $table->integer('delivery_status')->default(1)->comment('1=pending,2=complete');
             $table->integer('payment_status')->default(1)->comment('1=unpaid,2=paid');
             $table->timestamps();
             $table->softDeletes();

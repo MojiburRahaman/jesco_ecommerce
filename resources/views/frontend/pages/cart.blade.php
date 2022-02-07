@@ -137,7 +137,7 @@
                         <div class="col-lg-12">
                             <div class="cart-shiping-update-wrapper">
                                 <div class="cart-shiping-update">
-                                    <a href="#">Continue Shopping</a>
+                                    <a href="{{route('Frontendshop')}}">Continue Shopping</a>
                                 </div>
                                 <div class="cart-clear">
 
@@ -148,7 +148,7 @@
                     </div>
                 </form>
                 <div class="row">
-                    
+
                     <div class="col-lg-6 col-md-6 mb-lm-30px" id="coupon_section">
                         <div class="discount-code-wrapper">
                             <div class="title-wrap">
@@ -166,6 +166,7 @@
                                     text-transform: uppercase;" id="coupon_submit_btn" type="submit">Apply
                                     Coupon</button>
                             </div>
+                            <span class="text-danger" id="invalid_coupon"></span>
                             @if (session('coupon_invalid'))
                             <span class="text-danger">{{session('coupon_invalid')}}</span>
                             @endif
@@ -177,14 +178,14 @@
                             <div class="title-wrap">
                                 <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                             </div>
-                            <h5>Total products <span>৳
-                                    <span class="subtotal">{{$total_cart_amount}}</span>
+                            <h5>Total <span>৳
+                                    <span id="total" class="subtotal">{{$total_cart_amount}}</span>
                                 </span></h5>
-                            <h5>Discount ({{$discount}}%)<span>৳
+                            <h5 id="discount">Discount ({{$discount}}%)<span>৳
                                     <span class="discount">{{round(($total_cart_amount*$discount)/100)}}</span>
                                 </span></h5>
-                           
-                            <h4 class="grand-totall-title">Sub Total <span>৳<span
+
+                            <h4 class="grand-totall-title">Sub Total <span>৳<span id="subtotal"
                                         class="total">{{round($total_cart_amount - ($total_cart_amount*$discount)/100)}}</span></span>
                             </h4>
 
@@ -211,6 +212,8 @@
 @endsection
 @section('script_js')
 <script>
+
+
     $(".rotate").click(function(){
     $(this).toggleClass("down"); 
         var ele = $(this);
@@ -222,7 +225,7 @@
                 }
                      }),
             $.ajax({
-                type: "POST",
+                type: "POST",   
             url:"/cart/quantity-update",
            data:{
                cart_id:cart_id, 
@@ -244,10 +247,44 @@
 
 
     $(document).ready(function(){
+        $('#coupon_name').val('');
         $('#coupon_submit_btn').click(function(){
             var coupon_name_test = $('#coupon_name').val();
-            var coupon_redirect_url = " {{route('CartView')}}/" + coupon_name_test;
-    window.location.href = coupon_redirect_url;
+
+            $.ajaxSetup({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                     }),
+                     $.ajax({
+                type: "POST",   
+            url:"{{route('CouponCheck')}}",
+           data:{
+             coupon:coupon_name_test,
+               },
+           success: function(res) {
+                    if (res) {
+                        if (res.errors) {
+                        $('#invalid_coupon').html(res.errors);
+                        var total =   '{{$total_cart_amount}}';
+                         var discount =  '0';
+                         var subtotal =  total-discount;
+                            $('#discount').html('Discount (0%)<span>৳<span class="discount">'+discount+'</span></span>');
+                            $('#subtotal').html(subtotal);
+                        }
+                        if(res.yes){
+                            $('#invalid_coupon').html('');
+                         var total =   '{{$total_cart_amount}}';
+                         var discount =  Math.round((total*res.yes)/100);
+                         var subtotal =  total-discount;
+                            $('#discount').html('Discount ('+res.yes+'%)<span>৳<span class="discount">'+discount+'</span></span>');
+                            $('#subtotal').html(subtotal);
+                        }
+
+                    }
+                }
+            })
+
     });
     
     });

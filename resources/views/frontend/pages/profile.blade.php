@@ -36,7 +36,7 @@
                         <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a>
                         </li>
                         <li><a onclick="event.preventDefault();document.getElementById('from_logout').submit()"
-                            href="{{ route('logout') }}" class="nav-link">logout</a></li>
+                                href="{{ route('logout') }}" class="nav-link">logout</a></li>
                     </ul>
                 </div>
                 <form id="from_logout" action="{{ route('logout') }}" method="POST">
@@ -66,20 +66,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse ($billing_details as $order)
                                     <tr>
-                                        <td>1</td>
-                                        <td>May 10, 2018</td>
+                                        <td>{{$loop->index+1}}</td>
+                                        <td>{{$order->created_at->format("M d,Y")}}</td>
                                         <td><span class="success">Completed</span></td>
-                                        <td>$25.00 for 1 item </td>
+                                        @foreach ($order->order_summaries as $summary)
+
+                                        <td> {{$summary->subtotal}} for 1 item </td>
+                                        @endforeach
                                         <td><a href="cart.html" class="view">view</a></td>
                                     </tr>
+                                    @empty
                                     <tr>
-                                        <td>2</td>
-                                        <td>May 10, 2018</td>
-                                        <td>Processing</td>
-                                        <td>$17.00 for 1 item </td>
-                                        <td><a href="cart.html" class="view">view</a></td>
+                                        <td colspan="10"> No Order</td>
                                     </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

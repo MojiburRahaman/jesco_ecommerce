@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
-
-<!-- Mirrored from template.hasthemes.com/jesco/jesco/single-product-variable.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 25 Sep 2021 07:19:33 GMT -->
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="robots" content="index, follow" />
@@ -86,7 +83,7 @@
                                              <li><a href="checkout.html">Checkout Page</a></li>
                                              <li><a href="wishlist.html">Wishlist Page</a></li>
                                              <li><a href="my-account.html">Account Page</a></li>
-                                             <li><a href="login.html">Login & Register Page</a></li>
+                                             <li><a href="{{route('login')}}">Login & Register Page</a></li>
                                          </ul>
                                          <ul class="d-block">
                                              <li class="title"><a href="#">Pages</a></li>
@@ -207,7 +204,7 @@
                 @endif
                 @empty
                 <li>
-                    No Item in your cart
+                    No Item in your wishlist
                 </li>
                 
             @endforelse
@@ -246,11 +243,9 @@
                                 @php
                                 $Attribute =$cart_product->Product->Attribute
                                 ->where('color_id',$cart_product->color_id)
-                                ->where('size_id',$cart_product->size_id);
-                                foreach ($Attribute as $key => $value) {
-                                $regular_price =$value->regular_price;
-                                $sell_price = $value->sell_price;
-                                }
+                                ->where('size_id',$cart_product->size_id)->first();
+                                $regular_price =$Attribute->regular_price;
+                                $sell_price = $Attribute->selling_price;
                                 @endphp
                                 {{($sell_price == '')? $regular_price : $sell_price}}
                                  
@@ -424,6 +419,7 @@
                                         </a>
                                     </li>
                                 </ul>
+                                {{-- <a target="_blank" href="https://www.sslcommerz.com/" title="SSLCommerz" alt="SSLCommerz"><img style="width:300px;height:auto;" src="https://securepay.sslcommerz.com/public/image/SSLCommerz-Pay-With-logo-All-Size-01.png" /></a>  --}}
                             </div>
                         </div>
                         <!-- End single blog -->
@@ -441,6 +437,7 @@
                                             <li class="li"><a class="single-link" href="about.html">About</a></li>
                                             <li class="li"><a class="single-link" href="#">Event</a></li>
                                         </ul>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -508,7 +505,8 @@
             <div class="footer-bottom">
                 <div class="container">
                     <div class="row">
-                        <div class="col-12 text-center">
+                        <a target="_blank" href="https://www.sslcommerz.com/" title="SSLCommerz" alt="SSLCommerz"><img style="width:100%;height:50%;" src="https://securepay.sslcommerz.com/public/image/SSLCommerz-Pay-With-logo-All-Size-01.png" /></a> 
+                         <div class="col-12 text-center">
                             <p class="copy-text"> © 2021 <strong>Jesco</strong> Made With <i class="fa fa-heart"
                                     aria-hidden="true"></i> By <a class="company-name" href="https://hasthemes.com/">
                                     <strong> HasThemes</strong></a>.</p>
@@ -528,9 +526,9 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <h2>Search Your Product</h2>
-                        <form action="{{route('Frontendhome')}}" method="GET" class="navbar-form position-relative" role="search">
+                        <form action="{{route('FrontendSearch')}}" method="GET" class="navbar-form position-relative" role="search">
                             <div class="form-group">
-                                <input type="text" name="search" class="form-control" placeholder="Search here...">
+                                <input type="text" name="q" class="form-control" placeholder="Search here...">
                             </div>
                             <button type="submit" class="submit-btn"><i class="pe-7s-search"></i></button>
                         </form>
@@ -567,7 +565,7 @@
                                 </div>
                                 <button type="submit">Log in</button>
                                 <div class="member-register">
-                                    <p> Not a member? <a href="login.html"> Register now</a></p>
+                                    <p> Not a member? <a href="{{route('login')}}"> Register now</a></p>
                                 </div>
                             </form>
                         </div>
@@ -734,6 +732,7 @@
     <script src="{{asset('front/assets/js/vendor/vendor.min.js')}}"></script>
     <script src="{{asset('front/assets/js/plugins/plugins.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Main Js -->
     <script src="{{asset('front/assets/js/main.js')}}"></script>

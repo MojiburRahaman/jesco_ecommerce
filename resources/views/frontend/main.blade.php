@@ -692,7 +692,9 @@ Home
                             <p class="mt-30px mb-0">{{$latest_product->product_summary}}</p>
                             <div class="pro-details-quality">
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                    <div class="dec qtybutton">-</div>
+                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1">
+                                    <div class="inc qtybutton">+</div>
                                 </div>
                                 <div class="pro-details-cart">
                                     <a href="{{route('SingleProductView',$latest_product->slug)}}" class="add-cart"
@@ -726,7 +728,7 @@ Home
                                 <span>Share: </span>
                                 <ul class="d-flex">
                                     <li>
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{route('SingleProductView',$latest_product->slug)}}&display=popup"><i class="fa fa-facebook"></i></a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="fa fa-twitter"></i></a>
@@ -750,4 +752,16 @@ Home
     </div>
 </div>
 @endforeach
+@endsection
+
+@section('script_js')
+<script>
+     @if (session('orderPlace'))
+   Swal.fire(
+     'Thanks',
+    'Your order is placed order #{{session("orderPlace")}}',
+     'success'
+   )
+   @endif
+</script>
 @endsection

@@ -5,32 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Models\BlogComment;
 use App\Models\BlogReply;
+use App\Models\Cart;
 use App\Models\Catagory;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class FrontendController extends Controller
 {
-    function Frontendhome(Request $request)
+    function Frontendhome()
     {
-
-        if ($request->search != '') {
-            $search = strip_tags($request->search);
-            $catagories =  Catagory::latest('catagory_name')
-                ->select('catagory_name', 'id', 'slug')
-                ->withcount('Product')
-                ->get();
-            $products = Product::where('title', 'LIKE', "%$search%")
-                ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
-                ->where('status', 1)->get();
-
-            return view('frontend.pages.search', [
-                'products' => $products,
-                'search' => $search,
-                'catagories' => $catagories,
-
-            ]);
-        }
+        // return Cart::Where('cookie_id', session()->get('cookie_id'))->get();
+        // dd(Cookie::get('cookie_id'));
         $blogs = Blog::select('title', 'slug', 'blog_thumbnail', 'created_at')->withcount('BlogComment', 'BlogReply')
             ->get();
         $catagories = Catagory::with('Product.Attribute',)
@@ -46,6 +32,24 @@ class FrontendController extends Controller
             'blogs' => $blogs,
         ]);
     }
+    function FrontendSearch(Request $request)
+    {
+        $search = strip_tags($request->q);
+        $catagories =  Catagory::latest('catagory_name')
+            ->select('catagory_name', 'id', 'slug')
+            ->withcount('Product')
+            ->get();
+        $products = Product::where('title', 'LIKE', "%$search%")
+            ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
+            ->where('status', 1)->get();
+
+        return view('frontend.pages.search', [
+            'products' => $products,
+            'search' => $search,
+            'catagories' => $catagories,
+
+        ]);
+    }
     function Frontendshop()
     {
         $product = Product::with('Catagory', 'Attribute', 'Gallery')->where('status', 1)
@@ -55,10 +59,7 @@ class FrontendController extends Controller
             'products' => $product,
         ]);
     }
-    function FrontendProfile()
-    {
-        return view('frontend.pages.profile');
-    }
+   
     function FrontenblogView($slug)
     {
         $blog = Blog::where('slug', $slug)->first();

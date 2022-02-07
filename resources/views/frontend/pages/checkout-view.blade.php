@@ -40,9 +40,9 @@
 <!-- checkout area start -->
 <div class="checkout-area pt-100px pb-100px">
     <div class="container">
-        <form action="{{route('CheckoutPost')}}" method="POST">
+        <form action="{{route('CheckoutPost')}}" method="POST" id="checkout_form">
             @csrf
-        <div class="row">
+            <div class="row">
                 <div class="col-lg-7">
                     <div class="billing-info-wrap">
                         <h3>Billing Details</h3>
@@ -57,23 +57,23 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-6">
                                 <div class="billing-info mb-4">
-                                    <label>Billing User Name</label>
+                                    <label><span class="text-danger">*</span>Billing User Name</label>
                                     <input type="text" class="form-control @error('billing_user_name') is-invalid
                                 @enderror" name="billing_user_name" value="{{old('billing_user_name')}}"
                                         autocomplete="none" />
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 col-md-6">
                                 <div class="billing-info mb-4">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control @error('user_email') is-invalid
-                                @enderror" name="user_email" value="{{old('user_email')}}" autocomplete="none"
-                                        placeholder="Email" />
+                                    <label><span class="text-danger">*</span>Phone</label>
+                                    <input value="{{old('billing_number')}}" autocomplete="none" type="number"
+                                        placeholder="Billing Number" name="billing_number" class="form-control @error('billing_number') is-invalid
+                                @enderror" />
                                 </div>
                             </div>
                             <div class="col-lg-4 col-12">
                                 <div class="billing-select mb-4">
-                                    <label>Division</label>
+                                    <label><span class="text-danger">*</span>Division</label>
                                     <select class="division form-control @error('division_name') is-invalid
                                 @enderror" id="divisions_name" name="division_name">
                                         <option>Select One</option>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-lg-4 col-12">
                                 <div class="billing-select mb-4">
-                                    <label>Division</label>
+                                    <label><span class="text-danger">*</span>District</label>
                                     <select class="district form-control @error('disctrict_name') is-invalid
                                 @enderror" id="disctrict_name" name="district_name">
 
@@ -95,44 +95,30 @@
                             </div>
                             <div class="col-lg-4 col-12">
                                 <div class="billing-select mb-4">
-                                    <label>Division</label>
+                                    <label><span class="text-danger">*</span>Upazila</label>
                                     <select class="upozila  form-control @error('upozila_name') is-invalid
                                 @enderror" id="upozila_name" name="upozila_name">
 
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-6">
-                                <div class="billing-info mb-4">
-                                    <label>Phone</label>
-                                    <input value="{{old('billing_number')}}" autocomplete="none" type="number"
-                                        placeholder="Billing Number" name="billing_number" class="form-control @error('billing_number') is-invalid
-                                @enderror" />
-                                </div>
-                            </div>
+                            
                             <div class="col-lg-12">
                                 <div class="billing-info mb-4">
-                                    <label>Billing Address</label>
+                                    <label> <span class="text-danger">*</span> Billing Address</label>
                                     <textarea name="billing_address" class="form-control @error('billing_address') is-invalid
                                 @enderror"></textarea>
                                 </div>
                             </div>
-                            {{-- <div class="col-lg-6 col-md-6">
-                            <div class="billing-info mb-4">
-                                <label>Email Address</label>
-                                <input type="text" />
-                            </div>
-                        </div> --}}
                         </div>
 
-                        {{-- <div class="additional-info-wrap">
-                            <h4>Additional information</h4>
+                        <div class="additional-info-wrap">
                             <div class="additional-info">
                                 <label>Order notes</label>
-                                <textarea placeholder="Notes about your order, e.g. special notes for delivery. "
+                                <textarea placeholder="Notes about your order"
                                     name="message"></textarea>
                             </div>
-                        </div> --}}
+                        </div>
 
                     </div>
                 </div>
@@ -195,61 +181,29 @@
                             <div class="payment-method">
                                 <div class="payment-accordion element-mrg">
                                     <div id="faq" class="panel-group">
-                                        {{-- <div class="panel panel-default single-my-account m-0">
-                                        <div class="panel-heading my-account-title">
-                                            <h4 class="panel-title"><a data-bs-toggle="collapse" href="#my-account-1"
-                                                    class="collapsed" aria-expanded="true">Direct bank transfer</a>
-                                            </h4>
-                                        </div>
-                                        <div id="my-account-1" class="panel-collapse collapse show"
-                                            data-bs-parent="#faq">
-
-                                            <div class="panel-body">
-                                                <p>Please send a check to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                         <div class="">
-                                            <input style="height: 0px;width:0px;margin-top:10px" type="checkbox"
-                                                name="payment_option" id="cash_on_delivery" value="cash_on_delivery">
-                                            <label style="padding-bottom: 15px" for="cash_on_delivery">Cash On
-                                                Delivery</label>
-                                            <br>
-                                            <input style="height: 0px;width:0px;margin-top:10px" type="checkbox"
-                                                name="payment_option" id="paid" value="paid">
-                                            <label style="padding-bottom: 15px" for="paid">Pay Now</label>
-                                            {{-- <div class="panel-heading my-account-title">
-                                            <h4 class="panel-title"><a data-bs-toggle="collapse" href="#my-account-2"
-                                                    aria-expanded="false" class="collapsed">Check payments</a></h4>
-                                        </div>
-                                        <div id="my-account-2" class="panel-collapse collapse" data-bs-parent="#faq">
+                                            <div class="form-group">
 
-                                            <div class="panel-body">
-                                                <p>Please send a check to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
+                                                <input style="height: 2%;width:4%" type="radio" name="payment_option"
+                                                    id="cash_on_delivery" value="cash_on_delivery">
+                                                <label for="cash_on_delivery">Cash On
+                                                    Delivery</label>
                                             </div>
-                                        </div> --}}
-                                        </div>
-                                        {{-- <div class="panel panel-default single-my-account m-0">
-                                        <div class="panel-heading my-account-title">
-                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
-                                                    href="#my-account-3">Cash on delivery</a></h4>
-                                        </div>
-                                        <div id="my-account-3" class="panel-collapse collapse" data-bs-parent="#faq">
+                                            <div class="form-group">
 
-                                            <div class="panel-body">
-                                                <p>Please send a check to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
+                                                <input style="height: 2%;width:4%" type="radio" name="payment_option"
+                                                    id="paid" value="paid">
+                                                <label for="paid">Pay Now</label>
                                             </div>
+                                            
                                         </div>
-                                    </div> --}}
+                                      
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="Place-order mt-25">
-                            <button class="btn-hover order_btn" >Place Order</button>
+                            <button class="btn-hover order_btn">Place Order</button>
                         </div>
                     </div>
                 </div>
@@ -266,9 +220,14 @@
     $('.division').select2();
     $('.district').select2();
     $('.upozila').select2();
+
+    $('#paid').click(function(){
+$('#checkout_form').attr('action', '{{route("PayNow")}}' );
+    });
+    $('#cash_on_delivery').click(function(){
+$('#checkout_form').attr('action', '{{route("CheckoutPost")}}' );
+    });
 });
-
-
 
 
 $('#divisions_name').change(function(){
@@ -322,13 +281,13 @@ if (division_id) {
            if (disctrict_id == 47) {
                $('#shipping_id').html(60);
                @php
-                   session()->put('shipping',60);
+                   session()->flash('shipping',60);
                @endphp
                $('#sub_total').html(60 + parseInt(total_amount));
             }
             else{
                 @php
-                   session()->put('shipping',120);
+                   session()->flash('shipping',120);
                @endphp
                 $('#shipping_id').html(120)
                 $('#sub_total').html(120 + parseInt(total_amount));

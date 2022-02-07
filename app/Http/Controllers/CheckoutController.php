@@ -30,13 +30,18 @@ class CheckoutController extends Controller
     }
     function CheckoutajaxDivid(Request $request)
     {
-        // return $request;
+        $request->validate([
+            'division_id'=>['required','numeric'],
+        ]);
         $district = District::where('division_id', $request->division_id)
             ->select('id', 'name')->get();
         return response()->json($district);
     }
     function CheckoutajaxDistrictid(Request $request)
     {
+        $request->validate([
+            'district_id'=>['required','numeric'],
+        ]);
         $district = Upazila::where('district_id', $request->district_id)
             ->select('id', 'name')->get();
         return response()->json($district);
@@ -46,37 +51,38 @@ class CheckoutController extends Controller
         if (!session()->get('cart_total')) {
             return redirect('/');
         }
-        // print_r(session()->all());
         $request->validate([
             'billing_user_name' => ['required', 'string', 'max:255'],
-            'user_email' => ['required'],
-            'division_name' => ['required'],
-            'district_name' => ['required'],
-            'upozila_name' => ['required'],
+            'division_name' => ['required','numeric'],
+            'district_name' => ['required','numeric'],
+            'upozila_name' => ['required','numeric'],
             'billing_address' => ['required'],
             'billing_number' => ['required'],
             'payment_option' => ['required'],
-            // 'division' => ['required'],
             ]);
-            // return $request;
             if ($request->district_name == 47) {
-            session()->put('shipping', 60);
-        } else {
-            session()->put('shipping', 120);
-        }
+                session()->flash('shipping', 60);
+            } else {
+                session()->flash('shipping', 120);
+            }
+
+            $order_number = now()->format('dm') . Auth::id() . mt_rand(1, 1000);
 
         $billing_details = billing_details::insertGetId($request->except('_token') + [
-            'created_at' => Carbon::now(),
+            'created_at' => now(),
             'user_id' => Auth::id(),
+            'user_email' =>  auth()->user()->email,
         ]);
         $Order_Summaries_id = Order_Summaries::insertGetId([
             'billing_details_id' => $billing_details,
+            'user_id' => Auth::id(),
+            'order_number' => $order_number,
             'coupon_name' => session()->get('coupon_name'),
             'total' => session()->get('cart_total'),
             'subtotal' => session()->get('cart_subtotal') + session()->get('shipping'),
             'discount' => session()->get('cart_discount'),
             'shipping' => session()->get('shipping'),
-            'created_at' => Carbon::now(),
+            'created_at' => now(),
         ]);
         $carts = Cart::Where('cookie_id', Cookie::get('cookie_id'))->get();
         foreach ($carts as  $cart) {
@@ -86,7 +92,7 @@ class CheckoutController extends Controller
                 'color_id' => $cart->color_id,
                 'size_id' => $cart->size_id,
                 'quantity' => $cart->quantity,
-                'created_at' => Carbon::now(),
+                'created_at' =>now(),
             ]);
             attribute::where([
                 'product_id' => $cart->product_id,
@@ -103,7 +109,31 @@ class CheckoutController extends Controller
         session()->forget('cart_discount');
         session()->forget('cart_subtotal');
         session()->forget('shipping');
-        return redirect('/');
-        // return 'done';
+        return redirect('/')->with('orderPlace', $order_number);
+    }
+    function PayNow(Request $request){
+        if (!session()->get('cart_total')) {
+            return redirect('/');
+        }
+    // return    $order_number = now()->format('dm') . Auth::id() . mt_rand(1, 1000);
+        $request->validate([
+            'billing_user_name' => ['required', 'string', 'max:255'],
+            'division_name' => ['required','numeric'],
+            'district_name' => ['required','numeric'],
+            'upozila_name' => ['required','numeric'],
+            'billing_address' => ['required'],
+            'billing_number' => ['required'],
+            'payment_option' => ['required'],
+            ]);
+            // return $request;
+            if ($request->district_name == 47) {
+            session()->put('shipping', 60);
+        } else {
+            session()->put('shipping', 120);
+        }
+
+        session()->put('billing_info', $request->except('_token'));
+        session()->put('cookie_id', Cookie::get('cookie_id'));
+        return redirect()->route('pay');
     }
 }

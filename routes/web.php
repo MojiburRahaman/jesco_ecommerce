@@ -17,7 +17,9 @@
     use App\Http\Controllers\SearchController;
     use App\Http\Controllers\SizeController;
     use App\Http\Controllers\SubCatagoryController;
+    use App\Http\Controllers\UserProfileController;
     use App\Http\Controllers\WishlistController;
+    use App\Http\Controllers\SslCommerzPaymentController;
 
     /*
 |--------------------------------------------------------------------------
@@ -40,6 +42,7 @@
 
     // frontend route start
     Route::get('/', [FrontendController::class, 'Frontendhome'])->name('Frontendhome');
+    Route::get('/search', [FrontendController::class, 'FrontendSearch'])->name('FrontendSearch');
     Route::get('/product/{slug}', [ProductViewController::class, 'SingleProductView'])->name('SingleProductView');
     Route::post('/product/get-size', [ProductViewController::class, 'GetSizeByColor'])->name('GetSizeByColor');
     Route::post('/product/get-pricebysize', [ProductViewController::class, 'GetPriceBySize'])->name('GetPriceBySize');
@@ -58,7 +61,8 @@
 
     // cart route start
     Route::get('/cart', [CartController::class, 'CartView'])->name('CartView');
-    Route::get('/cart/{coupon_name}', [CartController::class, 'CartView']);
+    Route::post('/cart/coupon', [CartController::class, 'CouponCheck'])->name('CouponCheck');
+    // Route::get('/cart/{coupon_name}', [CartController::class, 'CartView']);
     Route::get('/cart/cart-delete/{id}', [CartController::class, 'CartDelete'])->name('CartDelete');
     Route::post('/cart/cart-clear/', [CartController::class, 'CartClear'])->name('CartClear');
     Route::post('/cart/quantity-update', [CartController::class, 'CartUpdate'])->name('CartUpdate');
@@ -67,7 +71,7 @@
     // cart route end
     Route::middleware(['auth', 'checkcoustomer'])->group(function () {
         // Profile route
-        Route::get('/profile', [FrontendController::class, 'FrontendProfile'])->name('FrontendProfile');
+        Route::get('/profile', [UserProfileController::class, 'FrontendProfile'])->name('FrontendProfile');
         // wishlist route start
         Route::get('/wishlist', [WishlistController::class, 'WishlistView'])->name('WishlistView');
         Route::post('/wishlist-post', [WishlistController::class, 'WishlistPost'])->name('WishlistPost');
@@ -77,11 +81,26 @@
         // checkout route start
         Route::get('/checkout', [CheckoutController::class, 'CheckoutView'])->name('CheckoutView');
         Route::post('/checkout-post', [CheckoutController::class, 'CheckoutPost'])->name('CheckoutPost');
+        Route::post('/checkout-pay', [CheckoutController::class, 'PayNow'])->name('PayNow');
 
         Route::post('/checkout/billing/division_id', [CheckoutController::class, 'CheckoutajaxDivid'])->name('CheckoutajaxDivid');
         Route::post('/checkout/billing/disctrict_id', [CheckoutController::class, 'CheckoutajaxDistrictid'])->name('CheckoutajaxDistrictid');
 
         // checkout route end
+
+        // SSLCOMMERZ Start
+        // Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+        // Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+        Route::get('/pay', [SslCommerzPaymentController::class, 'index'])->name('pay');
+        Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+        Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+        Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+        Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+        Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+        //SSLCOMMERZ END
 
     });
 
@@ -124,7 +143,7 @@
         // size route
         Route::resource('/size', SizeController::class);
         // 
-        Route::resource('/admin/blogs', BlogController::class);
+        Route::resource('/blogs', BlogController::class);
     });
 
 

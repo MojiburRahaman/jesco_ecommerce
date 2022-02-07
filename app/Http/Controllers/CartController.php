@@ -16,31 +16,69 @@ class CartController extends Controller
     function CartView($coupon_name = '')
     {
         $Carts = Cart::with(['Product.Attribute', 'Color', 'Size',])->Where('cookie_id', Cookie::get('cookie_id'))->get();
-        $coupon = Coupon::where('coupon_name', $coupon_name)->first();
-        // $cou = Coupon::where('coupon_name', $coupon_name)->coupon_expire_date;
-        // return $coupon->coupon_expire_date;
-        $current_date = Carbon::today()->format('Y-m-d');
-        // return $coupon->exists();
-        if ($coupon_name == '') {
-            $discount = 0;
-        } else {
-            if ($Carts->count() == '') {
-                // if theres no product in cart
-                return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Product In Your Cart");
-            } elseif (!Coupon::where('coupon_name', $coupon_name)->exists()) {
-                // if theres no coupon name exist 
-                return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Coupon In This Name");
-            } elseif ($current_date > $coupon->coupon_expire_date) {
-                // coupon expire date checking
-                return redirect('/cart/#coupon_section')->with('coupon_invalid', "Coupon Date Expired");
-            } elseif ($coupon->exists()) {
-                // if theres coupon name exist 
-                $discount = $coupon->coupon_amount;
-            }
-        }
+        $discount = 0;
+        // $coupon = Coupon::where('coupon_name', $coupon_name)->first();
+        // // $cou = Coupon::where('coupon_name', $coupon_name)->coupon_expire_date;
+        // // return $coupon->coupon_expire_date;
+        // $current_date = Carbon::today()->format('Y-m-d');
+        // // return $coupon->exists();
+        // if ($coupon_name == '') {
+        //     $discount = 0;
+        // } else {
+        //     if ($Carts->count() == '') {
+        //         // if theres no product in cart
+        //         return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Product In Your Cart");
+        //     } elseif (!Coupon::where('coupon_name', $coupon_name)->exists()) {
+        //         // if theres no coupon name exist 
+        //         return redirect('/cart/#coupon_section')->with('coupon_invalid', "There's No Coupon In This Name");
+        //     } elseif ($current_date > $coupon->coupon_expire_date) {
+        //         // coupon expire date checking
+        //         return redirect('/cart/#coupon_section')->with('coupon_invalid', "Coupon Date Expired");
+        //     } elseif ($coupon->exists()) {
+        //         // if theres coupon name exist 
+        //         $discount = $coupon->coupon_amount;
+        //     }
+        // }
         return view('frontend.pages.cart', compact('Carts', 'discount', 'coupon_name'));
     }
+    function CouponCheck(Request $request)
+    {
+        $request->validate([
+            'coupon' => ['required', 'string', 'max:100']
+        ]);
+        $coupon_name = strip_tags($request->coupon);
+        $current_date = Carbon::today()->format('Y-m-d');
+        $coupon = Coupon::where('coupon_name', $coupon_name)->first();
 
+        $total_cart_amount = session()->get('cart_total');
+        $subtotal = 0;
+        session()->put('coupon_name', '');
+        session()->put('cart_discount', 0);
+        session()->put('cart_subtotal', $total_cart_amount);
+
+        if (cart_total_product() == '') {
+            // if theres no product in cart
+            return response()->json(['errors' => "There's No Product In Your Cart"]);
+        } elseif (!Coupon::where('coupon_name', $coupon_name)->exists()) {
+            // if theres no coupon name exist 
+            return response()->json(['errors' => "There's No Coupon In This Name"]);
+        } elseif ($current_date > $coupon->coupon_expire_date) {
+            // coupon expire date checking
+            return response()->json(['errors' => "Coupon Date Expired"]);
+        } elseif ($coupon->exists()) {
+            // if theres coupon name exist 
+            $total_cart_amount = session()->get('cart_total');
+            $discount = $coupon->coupon_amount;
+            $discount_amount = round(($total_cart_amount * $discount) / 100);
+            $subtotal = $total_cart_amount - $discount_amount;
+            session()->put('coupon_name', $coupon_name);
+            session()->put('cart_discount', $discount_amount);
+            session()->put('cart_subtotal', $subtotal);
+
+            return response()->json(['yes' => $discount]);
+        }
+        return cart_total_product();
+    }
     function CartPost(Request $request)
     {
         // return $request;
