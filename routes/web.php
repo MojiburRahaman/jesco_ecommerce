@@ -143,6 +143,7 @@
         // size route
         Route::resource('/size', SizeController::class);
         // 
+        Route::post('/blogs/ckeditor-fileupload', [BlogController::class, 'CkfileUpload'])->name('CkfileUpload');
         Route::resource('/blogs', BlogController::class);
     });
 
