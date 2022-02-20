@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -46,5 +46,9 @@ class User extends Authenticatable
     function Wishlist()
     {
         return $this->hasMany(Wishlist::class, 'user_id');
+    }
+    function Newsletter()
+    {
+        return $this->hasMany(Newsletter::class, 'user_id');
     }
 }

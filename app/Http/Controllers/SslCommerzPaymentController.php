@@ -38,15 +38,9 @@ class SslCommerzPaymentController extends Controller
         # Here you have to receive all the order data to initate the payment.
         # Let's say, your oder transaction informations are saving in a table called "orders"
         # In "orders" table, order unique identity is "transaction_id". "status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
-        //  curl('https://sandbox.sslcommerz.com/gwprocess/v3/api.php');
-        // return 'ok';
+       
         abort_if(url()->previous() != route('CheckoutView'), '404');
         abort_if(session()->get('billing_info') == '', '404');
-        // dd(session('billing_info'));
-        // return $request->all();
-        // return session('test');
-        // return request()->path('https://sandbox.sslcommerz.com/gwprocess/v3/api.php');
-        // return $request;
         $post_data = array();
         $post_data['total_amount'] = session()->get('cart_subtotal') + session()->get('shipping'); # You cant not pay less than 10
         $post_data['currency'] = "BDT";
@@ -56,13 +50,13 @@ class SslCommerzPaymentController extends Controller
         $post_data['cus_name'] = session()->get('billing_info')['billing_user_name'];
         $post_data['cus_email'] = auth()->user()->email;
         $post_data['cus_add1'] = session()->get('billing_info')['billing_address'];
-        $post_data['cus_add2'] = "";
-        $post_data['cus_city'] = "";
-        $post_data['cus_state'] = "";
-        $post_data['cus_postcode'] = "";
+        $post_data['cus_add2'] = "1";
+        $post_data['cus_city'] = "1";
+        $post_data['cus_state'] = "1";
+        $post_data['cus_postcode'] = "1";
         $post_data['cus_country'] = "Bangladesh";
         $post_data['cus_phone'] = session()->get('billing_info')['billing_number'];
-        $post_data['cus_fax'] = "";
+        $post_data['cus_fax'] = "1";
 
         # SHIPMENT INFORMATION
         $post_data['ship_name'] = "Store Test";
@@ -84,7 +78,6 @@ class SslCommerzPaymentController extends Controller
         $post_data['value_b'] = "ref002";
         $post_data['value_c'] = "ref003";
         $post_data['value_d'] = "ref004";
-
         #Before  going to initiate the payment order status need to insert or update as Pending.
         $update_product = DB::table('orders')
             ->where('transaction_id', $post_data['tran_id'])
@@ -208,8 +201,7 @@ class SslCommerzPaymentController extends Controller
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
 
-                // echo "<br >Transaction is successfully Completed";
-                // print_r($request->all());
+                return redirect('/');
             } else {
                 /*
                 That means IPN did not work or IPN URL was not set in your merchant panel and Transation validation failed.
@@ -224,8 +216,7 @@ class SslCommerzPaymentController extends Controller
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
              */
-            // echo "Transaction is successfully Completed";
-            // print_r($request->all());
+            
         } else {
             #That means something wrong happened. You can redirect customer to your product page.
             // echo "Invalid Transaction";
@@ -311,10 +302,16 @@ class SslCommerzPaymentController extends Controller
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Failed']);
             echo "Transaction is Falied";
+            return redirect('/');
+
         } else if ($order_detials->status == 'Processing' || $order_detials->status == 'Complete') {
             echo "Transaction is already Successful";
+            return redirect('/');
+            
         } else {
             echo "Transaction is Invalid";
+            return redirect('/');
+
         }
     }
 

@@ -25,15 +25,33 @@
 <div class="account-dashboard pt-100px pb-100px">
     <div class="container">
         <div class="row">
+            @if (session('success'))
+            <div class="col-12">
+                <div class="mb-4 alert alert-success">{{session('success')}}</div>
+            </div>
+            @endif
+            @if (session('warning'))
+            <div class="col-12">
+                <div class="mb-4 alert alert-warning">{{session('warning')}}</div>
+            </div>
+            @endif
+            @if ($errors->any())
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                    <span class="text-danger mb-2">{{$error}}</span>
+                    @endforeach
+                </div>
+            </div>
+            @endif
             <div class="col-sm-12 col-md-3 col-lg-3">
-                <!-- Nav tabs -->
+
                 <div class="dashboard_tab_button" data-aos="fade-up" data-aos-delay="0">
                     <ul role="tablist" class="nav flex-column dashboard-list">
                         <li><a href="#dashboard" data-bs-toggle="tab" class="nav-link active">Dashboard</a></li>
                         <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
-                        <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a></li>
-                        <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
                         <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a>
+                        <li><a href="#change-password" data-bs-toggle="tab" class="nav-link">Change Password</a></li>
                         </li>
                         <li><a onclick="event.preventDefault();document.getElementById('from_logout').submit()"
                                 href="{{ route('logout') }}" class="nav-link">logout</a></li>
@@ -86,98 +104,62 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="downloads">
-                        <h4>Downloads</h4>
-                        <div class="table_page table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Downloads</th>
-                                        <th>Expires</th>
-                                        <th>Download</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Shopnovilla - Free Real Estate PSD Template</td>
-                                        <td>May 10, 2018</td>
-                                        <td><span class="danger">Expired</span></td>
-                                        <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Organic - ecommerce html template</td>
-                                        <td>Sep 11, 2018</td>
-                                        <td>Never</td>
-                                        <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="address">
-                        <p>The following addresses will be used on the checkout page by default.</p>
-                        <h5 class="billing-address">Billing address</h5>
-                        <a href="#" class="view">Edit</a>
-                        <p class="mb-2"><strong>Michael M Hoskins</strong></p>
-                        <address>
-                            <span class="mb-1 d-inline-block"><strong>City:</strong> Seattle</span>,
-                            <br>
-                            <span class="mb-1 d-inline-block"><strong>State:</strong> Washington(WA)</span>,
-                            <br>
-                            <span class="mb-1 d-inline-block"><strong>ZIP:</strong> 98101</span>,
-                            <br>
-                            <span><strong>Country:</strong> USA</span>
-                        </address>
+                    <div class="tab-pane fade" id="change-password">
+
+                        <form action="{{route('ChangeUserPass')}}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <h3>Change Password</h3>
+                            <div class="form-group mb-4">
+                                <label for="current_pass">Current Password</label>
+                                <input autofocus class="form-control" placeholder="Current Password" type="password"
+                                    name="current_pass" id="current_pass">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="new_pass">New Password</label>
+                                <input required class="form-control" placeholder="New Password" type="password"
+                                    name="new_pass" id="new_pass">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="confirm_pass">Confirm Password</label>
+                                <input required class="form-control" placeholder="Confirm Password" type="password"
+                                    name="confirm_pass" id="confirm_pass">
+                            </div>
+                            <div class="form-group save_button">
+                                <button class="btn" type="submit">Submit</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="account-details">
                         <h3>Account details </h3>
                         <div class="login">
                             <div class="login_form_container">
                                 <div class="account_login_form">
-                                    <form action="#">
-                                        <p>Already have an account? <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#loginActive">Log in instead!</a></p>
-                                        <div class="input-radio">
-                                            <span class="custom-radio"><input type="radio" value="1" name="id_gender">
-                                                Mr.</span>
-                                            <span class="custom-radio"><input type="radio" value="1" name="id_gender">
-                                                Mrs.</span>
-                                        </div> <br>
+                                    <form action="{{route('ProfileUpdate')}}" method="POST">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="default-form-box mb-20">
-                                            <label>First Name</label>
-                                            <input type="text" name="first-name">
-                                        </div>
-                                        <div class="default-form-box mb-20">
-                                            <label>Last Name</label>
-                                            <input type="text" name="last-name">
+                                            <label> Name</label>
+                                            <input required type="text" name="name" value="{{auth()->user()->name}}">
+                                            @error('name')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                         <div class="default-form-box mb-20">
                                             <label>Email</label>
-                                            <input type="text" name="email-name">
+                                            <input type="text" required name="email" value="{{auth()->user()->email}}">
+                                            @error('email')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @else
+                                            <span class="text-danger mt-2">*You need to verify email again if you change
+                                                it</span>
+                                            @enderror
                                         </div>
-                                        <div class="default-form-box mb-20">
-                                            <label>Password</label>
-                                            <input type="password" name="user-password">
-                                        </div>
-                                        <div class="default-form-box mb-20">
-                                            <label>Birthdate</label>
-                                            <input type="date" name="birthday">
-                                        </div>
-                                        <span class="example">
-                                            (E.g.: 05/31/1970)
-                                        </span>
-                                        <br>
-                                        <label class="checkbox-default" for="offer">
-                                            <input type="checkbox" id="offer">
-                                            <span>Receive offers from our partners</span>
-                                        </label>
-                                        <br>
                                         <label class="checkbox-default checkbox-default-more-text" for="newsletter">
-                                            <input type="checkbox" id="newsletter">
-                                            <span>Sign up for our newsletter<br><em>You may unsubscribe at any
-                                                    moment. For that purpose, please find our contact info in the
-                                                    legal notice.</em></span>
+
+                                            <input {{(auth()->user()->newsletter->first()->status == 1) ? 'checked' :
+                                            ''}} type="checkbox" id="newsletter" value="newsletter" name="newsletter">
+                                            <span>Sign up for our newsletter</span>
                                         </label>
                                         <div class="save_button mt-3">
                                             <button class="btn" type="submit">Save</button>

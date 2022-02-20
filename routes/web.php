@@ -69,9 +69,11 @@
     Route::post('/cartpost', [CartController::class, 'CartPost'])->name('CartPost');
 
     // cart route end
-    Route::middleware(['auth', 'checkcoustomer'])->group(function () {
+    Route::middleware(['auth', 'checkcoustomer','verified'])->group(function () {
         // Profile route
         Route::get('/profile', [UserProfileController::class, 'FrontendProfile'])->name('FrontendProfile');
+        Route::put('/profile/update', [UserProfileController::class, 'ProfileUpdate'])->name('ProfileUpdate');
+        Route::patch('/profile/change-password', [UserProfileController::class, 'ChangeUserPass'])->name('ChangeUserPass');
         // wishlist route start
         Route::get('/wishlist', [WishlistController::class, 'WishlistView'])->name('WishlistView');
         Route::post('/wishlist-post', [WishlistController::class, 'WishlistPost'])->name('WishlistPost');
@@ -89,11 +91,9 @@
         // checkout route end
 
         // SSLCOMMERZ Start
-        // Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-        // Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
         Route::get('/pay', [SslCommerzPaymentController::class, 'index'])->name('pay');
-        Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+        // Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
         Route::post('/success', [SslCommerzPaymentController::class, 'success']);
         Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
