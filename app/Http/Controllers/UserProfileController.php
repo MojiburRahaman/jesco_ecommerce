@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\billing_details;
 use App\Models\Newsletter;
+use App\Models\Order_Summaries;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,11 +12,18 @@ use Illuminate\Validation\Rules\Password;
 
 class UserProfileController extends Controller
 {
-    function FrontendProfile()
+    function FrontendProfile(Request $request)
     {
-        $billing_details = billing_details::where('user_id', auth()->id())->with('order_summaries')->get();
+        if ($request->ajax()) {
+            $orders = Order_Summaries::where('user_id', auth()->id())->latest('id')->withCount('Order_Details')->simplepaginate('10');
+            $view = view('frontend.pages.order-pagination-data', [
+                'orders' => $orders,
+            ])->render();
+            return response()->json(['html' => $view,]);
+        }
+        $orders = Order_Summaries::where('user_id', auth()->id())->latest('id')->withCount('Order_Details')->simplepaginate('10');
         return view('frontend.pages.profile', [
-            'billing_details' => $billing_details,
+            'orders' => $orders,
         ]);
     }
     function ProfileUpdate(Request $request)

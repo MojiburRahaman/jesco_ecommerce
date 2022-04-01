@@ -52,6 +52,7 @@ menu-open
                                     <th>SL</th>
                                     <th>Catagory Name</th>
                                     <th>Created At</th>
+                                    <th>add to home</th>
                                     @if (auth()->user()->can('Delete Category') || auth()->user()->can('Edit Category'))
 
                                     <th>Action</th>s
@@ -64,7 +65,6 @@ menu-open
                                 <tr>
                                     <td>
                                         @can('Delete Category')
-
                                         <input type="checkbox" class="checkbox" name="delete[]" value="{{$item->id}}">
                                         &nbsp;
                                         @endcan
@@ -75,6 +75,15 @@ menu-open
                 <td>{{$item->catagory_name}}</td>
                 <form action="{{route('catagory.destroy',$item->id)}}" method="post">
                     <td>{{$item->created_at->diffForHumans()}}</td>
+                    <td>
+                        @if ($item->add_to_home == 1)
+                        <a href="{{route('CategoryAddToHome',$item->id)}}" class="btn-sm btn-primary">Active</a>
+                        @endif
+                        @if ($item->add_to_home == 2)
+                        <a href="{{route('CategoryAddToHome',$item->id)}}" class="btn-sm btn-warning">Inactive</a>
+
+                        @endif
+                    </td>
                     @if (auth()->user()->can('Delete Category') || auth()->user()->can('Edit Category'))
                     <td>
                         @can('Edit Category')

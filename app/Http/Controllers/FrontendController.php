@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailContact;
+use App\Models\AboutSite;
+use App\Models\Banner;
+use App\Models\BestDeal;
+use App\Models\BestDealProduct;
 use App\Models\Blog;
 use App\Models\BlogComment;
 use App\Models\BlogReply;
-use App\Models\Cart;
 use App\Models\Catagory;
+use App\Models\Contact;
+use App\Models\Faq;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 
 class FrontendController extends Controller
 {
     function Frontendhome()
     {
-        // return Cart::Where('cookie_id', session()->get('cookie_id'))->get();
-        // dd(Cookie::get('cookie_id'));
+        $banners = Banner::where('status', 1)->get();
+        $deals = BestDeal::first();
         $blogs = Blog::select('title', 'slug', 'blog_thumbnail', 'created_at')->withcount('BlogComment', 'BlogReply')
             ->get();
         $catagories = Catagory::with('Product.Attribute',)
@@ -29,19 +37,41 @@ class FrontendController extends Controller
         return view('frontend.main', [
             'latest_products' => $product,
             'catagories' => $catagories,
+            'banners' => $banners,
             'blogs' => $blogs,
+            'deals' => $deals,
         ]);
     }
     function FrontendSearch(Request $request)
     {
-        $search = strip_tags($request->q);
+        $search = strip_tags($request->search);
+
         $catagories =  Catagory::latest('catagory_name')
             ->select('catagory_name', 'id', 'slug')
             ->withcount('Product')
             ->get();
-        $products = Product::where('title', 'LIKE', "%$search%")
-            ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
-            ->where('status', 1)->get();
+        $products = Product::query();
+        if ($request->name == 'asc') {
+            # code...
+            $products = Product::where('title', 'LIKE', "%$search%")
+                ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
+                ->where('status', 1)
+                ->orderBy('title', 'asc')
+                ->simplepaginate(10);
+        } elseif ($request->name == 'desc') {
+            $products = Product::where('title', 'LIKE', "%$search%")
+                ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
+                ->where('status', 1)
+                ->orderBy('title', 'desc')
+                ->simplepaginate(10);
+        } else {
+
+            $products = Product::where('title', 'LIKE', "%$search%")
+                ->with('Catagory:id,catagory_name,slug', 'Attribute', 'Gallery:product_img,product_id')
+                ->where('status', 1)
+                ->orderBy('title', 'asc')
+                ->simplepaginate(10);
+        }
 
         return view('frontend.pages.search', [
             'products' => $products,
@@ -59,7 +89,7 @@ class FrontendController extends Controller
             'products' => $product,
         ]);
     }
-   
+
     function FrontenblogView($slug)
     {
         $blog = Blog::where('slug', $slug)->first();
@@ -133,5 +163,55 @@ class FrontendController extends Controller
         $blog_comment->blog_id = $blog_id;
         $blog_comment->save();
         return back();
+    }
+    public function FrontendDeals()
+    {
+        $deals = BestDeal::first();
+        abort_if($deals == '' || $deals->status == 2, 404);
+        return view('frontend.pages.deals', [
+            'DealsProducts' => BestDealProduct::inRandomOrder()->paginate('20'),
+            'deals' => $deals,
+
+        ]);
+    }
+    public function FrontendAbout()
+    {
+        return view('frontend.pages.about', [
+            'about' => AboutSite::first(),
+        ]);
+    }
+    public function FrontendContact()
+    {
+        return view('frontend.pages.contact');
+    }
+    public function FrontendContactPost(Request $request)
+    {
+        $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'message' => ['required'],
+        ]);
+        if ($request->ajax()) {
+
+            $contact = new Contact;
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->message = $request->message;
+            $contact->save();
+
+            $send_to = SiteSetting::first();
+            dispatch(new SendEmailContact($contact, $send_to->email));
+
+            $cookie_id_generate = time() . Str::random(10);
+            Cookie::queue('visitor_contact', $cookie_id_generate, 43200);
+            return response()->json(['done' => 'Success']);
+        }
+        abort('404');
+    }
+    public function FrontendFaQ()
+    {
+        return view('frontend.pages.faq', [
+            'faqs' => Faq::latest()->get(),
+        ]);
     }
 }

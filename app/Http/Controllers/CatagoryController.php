@@ -17,7 +17,7 @@ class CatagoryController extends Controller
     public function index()
     {
         if (auth()->user()->can('View Category')) {
-            $catagoreis = Catagory::select('id', 'catagory_name', 'created_at')->latest('id')->paginate();
+            $catagoreis = Catagory::select('id', 'catagory_name','add_to_home', 'created_at')->latest('id')->paginate();
             return view('backend.catagory.index', [
                 'catagoreis' => $catagoreis,
             ]);
@@ -164,5 +164,21 @@ class CatagoryController extends Controller
         } else {
             abort('404');
         }
+    }
+    public function CategoryAddToHome($id)
+    {
+        // dd('ok');
+      $catagory =  Catagory::findorfail($id);
+      if ($catagory->add_to_home == 1) {
+        $catagory->add_to_home = 2;
+        $catagory->save();
+        return back()->with('warning', 'Category Remove From Home Page');
+    } else {
+        // dd('ok');
+          $catagory->add_to_home = 1;
+          $catagory->save();
+          return back()->with('success', 'Category Add to Home Page');
+      }
+      
     }
 }

@@ -67,8 +67,8 @@
                     <div class="tab-pane fade show active" id="dashboard">
                         <h4>Welcome ,{{auth()->user()->name}} </h4>
                         <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent
-                                orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a
-                                href="#">Edit your password and account details.</a></p>
+                                orders</a> and Edit your <a
+                                href="#"> password and account details.</a></p>
                     </div>
                     <div class="tab-pane fade" id="orders">
                         <h4>Orders</h4>
@@ -78,22 +78,24 @@
                                     <tr>
                                         <th>Order</th>
                                         <th>Date</th>
-                                        <th>Status</th>
                                         <th>Total</th>
-                                        <th>Actions</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($billing_details as $order)
+                                    @forelse ($orders as $order)
                                     <tr>
-                                        <td>{{$loop->index+1}}</td>
+                                        <td>{{'#' .$order->order_number}}</td>
                                         <td>{{$order->created_at->format("M d,Y")}}</td>
-                                        <td><span class="success">Completed</span></td>
-                                        @foreach ($order->order_summaries as $summary)
+                                        <td> {{'৳'.$order->subtotal}} for {{$order->order__details_count}} item </td>
+                                        @if ($order->delivery_status == 1)
+                                        <td><span class="success">Pending</span></td>
+                                        @elseif ($order->delivery_status == 2)
+                                        <td><span class="success">On The Way</span></td>
+                                        @else
+                                        <td><span class="success">Deliverd</span></td>
+                                        @endif
 
-                                        <td> {{$summary->subtotal}} for 1 item </td>
-                                        @endforeach
-                                        <td><a href="cart.html" class="view">view</a></td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -101,7 +103,22 @@
                                     </tr>
                                     @endforelse
                                 </tbody>
+                                <tbody id="ajax-data">
+
+                                </tbody>
                             </table>
+                            @if ($orders->links() != '' )
+                            <div class="load_image text-center" style="display: none">
+                                <p>
+                                    <img width="30%" src="{{asset('images/reload.gif')}}" alt="">
+                                </p>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <button class="loadMore_btn" style="color: #fb5d5d;" onclick="MoreData()">
+                                    Load More
+                                </button>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="tab-pane fade" id="change-password">
@@ -176,3 +193,31 @@
 </div>
 <!-- account area start -->
 @endsection
+
+@section('script_js')
+<script>
+    var page = 1;
+ function MoreData() {
+    page++;
+    loadMoreData(page)
+} 
+function loadMoreData(page){
+     $('.loadMore_btn').hide();
+    $('.load_image').show();
+    $.ajax({
+        url:'?page=' + page,
+        type:'get',
+    })
+    .done(function(data){
+        if(data.html == ""){
+         $('.loadMore_btn').hide();
+        $('.load_image').hide();
+        $('.no_data').show();
+            return;
+        }
+        $('#ajax-data').append(data.html);
+        $('.load_image').hide();
+        $('.loadMore_btn').show();
+    })
+}
+</script>

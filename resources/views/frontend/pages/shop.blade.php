@@ -35,50 +35,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="shop-grid">
                                     <div class="row mb-n-30px">
-                                        {{-- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30px" data-aos="fade-up"
-                                                data-aos-delay="200">
-                                                <!-- Single Prodect -->
-                                                <div class="product">
-                                                    <div class="thumb">
-                                                        <a href="single-product.html" class="image">
-                                                            <img src="assets/images/product-image/1.jpg"
-                                                                alt="Product" />
-                                                            <img class="hover-image"
-                                                                src="assets/images/product-image/1.jpg" alt="Product" />
-                                                        </a>
-                                                        <span class="badges">
-                                                            <span class="new">New</span>
-                                                        </span>
-                                                        <div class="actions">
-                                                            <a href="wishlist.html" class="action wishlist"
-                                                                title="Wishlist"><i class="pe-7s-like"></i></a>
-                                                            <a href="#" class="action quickview"
-                                                                data-link-action="quickview" title="Quick view"
-                                                                data-bs-toggle="modal" data-bs-target="#exampleModal"><i
-                                                                    class="pe-7s-search"></i></a>
-                                                            <a href="compare.html" class="action compare"
-                                                                title="Compare"><i class="pe-7s-refresh-2"></i></a>
-                                                        </div>
-                                                        <button title="Add To Cart" class=" add-to-cart">Add
-                                                            To Cart</button>
-                                                    </div>
-                                                    <div class="content">
-                                                        <span class="ratings">
-                                                            <span class="rating-wrap">
-                                                                <span class="star" style="width: 100%"></span>
-                                                            </span>
-                                                            <span class="rating-num">( 5 Review )</span>
-                                                        </span>
-                                                        <h5 class="title"><a href="single-product.html">Women's
-                                                                Elizabeth Coat
-                                                            </a>
-                                                        </h5>
-                                                        <span class="price">
-                                                            <span class="new">$38.50</span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
+                                     
 
                                         @foreach ($products as $latest_product)
                                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30px" data-aos="fade-up"

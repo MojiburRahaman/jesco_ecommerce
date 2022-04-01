@@ -38,27 +38,18 @@ Search Result for "{{$search}}"
                     <!-- Left Side start -->
                     <p><span>{{$products->count()}}</span> Product Found</p>
                     <!-- Left Side End -->
-                    <div class="shop-tab nav">
-                        <a class="active" href="#shop-grid" data-bs-toggle="tab">
-                            <i class="fa fa-th" aria-hidden="true"></i>
-                        </a>
-                        <a href="#shop-list" data-bs-toggle="tab">
-                            <i class="fa fa-list" aria-hidden="true"></i>
-                        </a>
-                    </div>
                     <!-- Right Side Start -->
                     <div class="select-shoing-wrap d-flex align-items-center">
                         <div class="shot-product">
                             <p>Sort By:</p>
                         </div>
                         <div class="shop-select">
-                            <select class="shop-sort">
-                                <option data-display="Relevance">Relevance</option>
-                                <option value="1"> Name, A to Z</option>
-                                <option value="2"> Name, Z to A</option>
-                                <option value="3"> Price, low to high</option>
-                                <option value="4"> Price, high to low</option>
-                            </select>
+                            <form action="" method="GET" id="filter_form">
+                                <select name="name" class="shop-sort" id="filter_cat"  onchange="this.form.submit()">
+                                    <option {{(Request::get('name') == 'asc' ) ? 'selected' : 'none'}}  value="asc"> Name, A to Z</option>
+                                    <option {{(Request::get('name') == 'desc' ) ? 'selected' : 'none'}}  value="desc"> Name, Z to A</option>
+                                </select>
+                            </form>
 
                         </div>
                     </div>
@@ -121,19 +112,20 @@ Search Result for "{{$search}}"
                                                     </h5>
                                                     <span class="price">
                                                         @php
-                                                        $regular_price =
-                                                        collect($latest_product->Attribute)->min('regular_price');
-                                                        $sell_price =
-                                                        collect($latest_product->Attribute)->min('sell_price');
+                                                        $regular_price =collect($latest_product->Attribute)->min('regular_price');
+                                                        $sell_price = collect($latest_product->Attribute)->min('sell_price');
+                                                       
                                                         @endphp
                                                         @if ($sell_price != '')
-
+            
                                                         <span class="new">৳
                                                             {{$sell_price}}
                                                         </span>
                                                         @else
+                                                        <span class="new">
                                                         ৳{{$regular_price}}
-
+                                                        </span>
+            
                                                         @endif
                                                         @if ($sell_price != '')
                                                         &nbsp; <span class="new">
@@ -151,7 +143,7 @@ Search Result for "{{$search}}"
                                         @endforelse
                                     </div>
                                 </div>
-                     
+
                             </div>
                         </div>
                     </div>
@@ -170,7 +162,7 @@ Search Result for "{{$search}}"
                 <div class="shop-sidebar-wrap">
                     <!-- Sidebar single item -->
                     <div class="sidebar-widget-search">
-                        <form id="widgets-searchbox" action="{{route('Frontendhome')}}">
+                        <form id="widgets-searchbox" action="{{route('FrontendSearch')}}" method="GET">
                             <input class="input-field" type="search" placeholder="Search Product" name="search">
                             <button class="widgets-searchbox-btn" type="submit">
                                 <i class="fa fa-search"></i>
@@ -249,17 +241,17 @@ Search Result for "{{$search}}"
                     <div class="sidebar-widget-image">
                         <div class="single-banner">
                             <img src="{{asset('front/assets/images/banner/2.jpg')}}" alt="">
-                            <div class="item-disc">
-                                <h2 class="title">#bestsellers</h2>
-                                <a href="single-product-variable.html" class="shop-link">Shop Now</a>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <!-- Sidebar single item -->
+                    <div class="item-disc">
+                        <h2 class="title">#bestsellers</h2>
+                        <a href="single-product-variable.html" class="shop-link">Shop Now</a>
+                    </div>
                 </div>
-            </div>
+            </div> --}}
+            <!-- Sidebar single item -->
         </div>
     </div>
+</div>
+</div>
 </div>
 <!-- Shop Page End  -->
 
@@ -311,7 +303,9 @@ Search Result for "{{$search}}"
                                             {{$sell_price}}
                                         </span>
                                         @else
-                                        ৳{{$regular_price}}
+                                        <span class="new">
+                                            ৳{{$regular_price}}
+                                            </span>
 
                                         @endif
                                         @if ($sell_price != '')
@@ -399,3 +393,15 @@ Search Result for "{{$search}}"
 
 
 @endsection
+@section('script_js')
+{{-- <script>
+   $('#filter_cat').change(function() {
+            $catagory_id = $(this).val();
+            $('#filter_cat').submit();
+            alert($catagory_id);
+           
+        });
+    
+</script> --}}
+@endsection
+

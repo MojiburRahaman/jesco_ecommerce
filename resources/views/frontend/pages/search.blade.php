@@ -52,14 +52,12 @@ Search Result for "{{$search}}"
                             <p>Sort By:</p>
                         </div>
                         <div class="shop-select">
-                            <select class="shop-sort">
-                                <option data-display="Relevance">Relevance</option>
-                                <option value="1"> Name, A to Z</option>
-                                <option value="2"> Name, Z to A</option>
-                                <option value="3"> Price, low to high</option>
-                                <option value="4"> Price, high to low</option>
+                            <form action="" method="GET">
+                            <select name="name" class="shop-sort" onchange="this.form.submit()">
+                                <option value="asc"> Name, A to Z</option>
+                                <option value="desc"> Name, Z to A</option>
                             </select>
-
+                        </form>
                         </div>
                     </div>
                     <!-- Right Side End -->
@@ -132,13 +130,15 @@ Search Result for "{{$search}}"
                                                             {{$sell_price}}
                                                         </span>
                                                         @else
-                                                        ৳{{$regular_price}}
+                                                        <span class="new">
 
+                                                        ৳ {{$regular_price}}
+                                                        </span> 
                                                         @endif
                                                         @if ($sell_price != '')
                                                         &nbsp; <span class="new">
                                                             <del>
-                                                                ৳{{$regular_price}}
+                                                                ৳ {{$regular_price}}
                                                             </del>
                                                         </span>
                                                         @endif

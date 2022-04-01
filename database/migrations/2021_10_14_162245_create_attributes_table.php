@@ -22,6 +22,7 @@ class CreateAttributesTable extends Migration
             $table->string('quantity');
             $table->string('regular_price');
             $table->string('sell_price')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

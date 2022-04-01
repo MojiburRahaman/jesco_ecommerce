@@ -40,7 +40,15 @@ class RoleController extends Controller
     public function create()
     {
         if (auth()->user()->can('Create Role')) {
-            // $permission = Permission::create(['name' => 'View Category']);
+
+// $permission = Permission::create(['name' => 'View Deals']);
+// $permission = Permission::create(['name' => 'Subscriber']);
+//             $permission = Permission::create(['name' => 'About']);
+//             $permission = Permission::create(['name' => 'Setting']);
+//             $permission = Permission::create(['name' => 'Banner']);
+            // $permission = Permission::create(['name' => 'Order']);
+
+            // $permission = Permission::create(['name' => 'Order']);
             // $permission = Permission::create(['name' => 'Create Category']);
             // $permission = Permission::create(['name' => 'Edit Category']);
             // $permission = Permission::create(['name' => 'Delete Category']);
@@ -98,7 +106,7 @@ class RoleController extends Controller
 
             $role = Role::create(['name' => $request->role_name]);
             $role->givePermissionTo($request->permission);
-            return redirect('/roles ')->with('success', 'Role Added Successfully');
+            return redirect()->route('roles.index')->with('success', 'Role Added Successfully');
         } else {
             abort('404');
         }
@@ -147,7 +155,7 @@ class RoleController extends Controller
             // return $request;
             $role = Role::findorfail($id);
             $role->syncPermissions($request->permission);
-            return redirect('/roles')->with('success', 'Role Edited Successfully');
+            return redirect()->route('roles.index')->with('success', 'Role Edited Successfully');
         } else {
             abort('404');
         }
@@ -241,7 +249,7 @@ class RoleController extends Controller
         ]);
         // return $request;
         $random_pass_genarate = Str::random(10);
-        // return $random_pass_genarate;
+        
         $user = new User;
         $user->name = $request->user_name;
         $user->email = $request->user_email;

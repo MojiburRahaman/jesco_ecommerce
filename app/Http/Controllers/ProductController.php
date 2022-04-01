@@ -286,10 +286,13 @@ class ProductController extends Controller
                     if ($request->selling_price[$key] != '') {
                         $regular_price = $request->regular_price[$key];
                         $discount_amount = ($request->regular_price[$key] * $request->selling_price[$key]) / 100;
-                        $sell_price = $request->regular_price[$key] - $discount_amount;
+                        $sell_price = round($request->regular_price[$key] - $discount_amount);
 
                         $attribute->sell_price = $sell_price;
                         $attribute->discount = $request->selling_price[$key];
+                    }else {
+                        $attribute->sell_price = '';
+                        $attribute->discount = '';
                     }
                     $attribute->save();
                 } else {

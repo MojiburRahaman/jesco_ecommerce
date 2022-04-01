@@ -1,6 +1,7 @@
  <?php
 
-    use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BestDealController;
+use App\Http\Controllers\BlogController;
     use App\Http\Controllers\BrandController;
     use App\Http\Controllers\CartController;
     use Illuminate\Support\Facades\Route;
@@ -15,7 +16,8 @@
     use App\Http\Controllers\ProductViewController;
     use App\Http\Controllers\RoleController;
     use App\Http\Controllers\SearchController;
-    use App\Http\Controllers\SizeController;
+use App\Http\Controllers\SiteSettingController;
+use App\Http\Controllers\SizeController;
     use App\Http\Controllers\SubCatagoryController;
     use App\Http\Controllers\UserProfileController;
     use App\Http\Controllers\WishlistController;
@@ -42,7 +44,12 @@
 
     // frontend route start
     Route::get('/', [FrontendController::class, 'Frontendhome'])->name('Frontendhome');
+    Route::get('/faq', [FrontendController::class, 'FrontendFaQ'])->name('FrontendFaQ');
+    Route::get('/about', [FrontendController::class, 'FrontendAbout'])->name('FrontendAbout');
+    Route::get('/contact', [FrontendController::class, 'FrontendContact'])->name('FrontendContact');
+    Route::post('/contact/post', [FrontendController::class, 'FrontendContactPost'])->name('FrontendContactPost');
     Route::get('/search', [FrontendController::class, 'FrontendSearch'])->name('FrontendSearch');
+    Route::get('/deals', [FrontendController::class, 'FrontendDeals'])->name('FrontendDeals');
     Route::get('/product/{slug}', [ProductViewController::class, 'SingleProductView'])->name('SingleProductView');
     Route::post('/product/get-size', [ProductViewController::class, 'GetSizeByColor'])->name('GetSizeByColor');
     Route::post('/product/get-pricebysize', [ProductViewController::class, 'GetPriceBySize'])->name('GetPriceBySize');
@@ -99,20 +106,28 @@
         Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
         Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 
-        Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+        // Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
         //SSLCOMMERZ END
 
     });
 
     // frontend route end
 
-
+    Route::get('/admin/login', [DashboardController::class, 'AdminLogin'])->name('AdminLogin')->middleware('guest', 'throttle:10,5');
+    Route::post('/admin/login', [DashboardController::class, 'AdminLoginPost'])->name('AdminLoginPost')->middleware('guest', 'throttle:10,5');
     // backend route start
     Route::middleware(['auth', 'checkadminpanel'])->prefix('admin')->group(function () {
         // dashboard route
+        Route::get('/change-password', [DashboardController::class, 'AdminChangePassword'])->name('AdminChangePassword');
+        Route::post('/change-password', [DashboardController::class, 'AdminChangePasswordPost'])->name('AdminChangePasswordPost');
         Route::resource('/dashboard', DashboardController::class);
+        Route::get('/order', [DashboardController::class,'DashboardOrder'])->name('DashboardOrder');
+        Route::get('/order/details/{id}', [DashboardController::class,'OrderDetails'])->name('OrderDetails');
+        Route::get('/order/invoice/{id}', [DashboardController::class,'InvoiceDownload'])->name('InvoiceDownload');
+        Route::get('/order/delivery/{id}', [DashboardController::class,'DeliveryStatus'])->name('DeliveryStatus');
 
         // catagory route
+        Route::get('/catagory/add-to-home/{id}', [CatagoryController::class, 'CategoryAddToHome'])->name('CategoryAddToHome');
         Route::post('/catagory/mark-delete', [CatagoryController::class, 'MarkdeleteCatagory'])->name('MarkdeleteCatagory');
         Route::resource('/catagory', CatagoryController::class);
 
@@ -145,6 +160,21 @@
         // 
         Route::post('/blogs/ckeditor-fileupload', [BlogController::class, 'CkfileUpload'])->name('CkfileUpload');
         Route::resource('/blogs', BlogController::class);
+        Route::resource('/deals', BestDealController::class)->except('edit', 'update');
+
+        Route::get('settings/faq', [SiteSettingController::class, 'SiteFaqView'])->name('SiteFaqView');
+        Route::post('settings/faq/create', [SiteSettingController::class, 'SiteFaqCreate'])->name('SiteFaqCreate');
+        Route::get('settings/faq/delete/{id}', [SiteSettingController::class, 'SiteFaqDelete'])->name('SiteFaqDelete');
+        Route::get('settings/about/{id}', [SiteSettingController::class, 'SiteAbout'])->name('SiteAbout');
+        Route::post('settings/about', [SiteSettingController::class, 'SiteAboutUpdate'])->name('SiteAboutUpdate');
+        Route::get('settings/banner-status/{id}', [SiteSettingController::class, 'SiteBannerStatus'])->name('SiteBannerStatus');
+        Route::get('settings/banner-delete/{id}', [SiteSettingController::class, 'SiteBannerDelete'])->name('SiteBannerDelete');
+        Route::post('settings/banner-post', [SiteSettingController::class, 'SiteBannerPost'])->name('SiteBannerPost');
+        Route::get('settings/banner', [SiteSettingController::class, 'SiteBanner'])->name('SiteBanner');
+        Route::post('settings/subscriber', [SiteSettingController::class, 'SiteSubscriber'])->name('SiteSubscriber');
+        Route::resource('/settings', SiteSettingController::class)->except('show', 'destroy', 'index', 'store');
+
+
     });
 
 

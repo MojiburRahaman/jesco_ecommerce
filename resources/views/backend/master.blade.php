@@ -12,6 +12,8 @@
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="{{asset('backend/plugins/fontawesome-free/css/all.min.css')}}">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <link rel="stylesheet" href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
         <!-- overlayScrollbars -->
         <link rel="stylesheet" href="{{asset('backend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
         <!-- Theme style -->
@@ -23,151 +25,33 @@
 
             <!-- Preloader -->
             <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
-                    width="60">
+                {{-- <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+                    width="60"> --}}
+                    <h4>{{config('app.name')}}</h4>
             </div>
 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-dark">
                 <!-- Left navbar links -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                                class="fas fa-bars"></i></a>
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-                        <a href="index3.html" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-                        <a href="#" class="nav-link">Contact</a>
-                    </li>
-                </ul>
-
-                <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Navbar Search -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                        </a>
-                        <div class="navbar-search-block">
-                            <form class="form-inline">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                        aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-
-                    <!-- Messages Dropdown Menu -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" data-toggle="dropdown" href="#">
-                            <i class="far fa-comments"></i>
-                            <span class="badge badge-danger navbar-badge">3</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <a href="#" class="dropdown-item">
-                                <!-- Message Start -->
-                                <div class="media">
-                                    <img src="dist/img/user1-128x128.jpg" alt="User Avatar"
-                                        class="img-size-50 mr-3 img-circle">
-                                    <div class="media-body">
-                                        <h3 class="dropdown-item-title">
-                                            Brad Diesel
-                                            <span class="float-right text-sm text-danger"><i
-                                                    class="fas fa-star"></i></span>
-                                        </h3>
-                                        <p class="text-sm">Call me whenever you can...</p>
-                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                                <!-- Message End -->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <!-- Message Start -->
-                                <div class="media">
-                                    <img src="dist/img/user8-128x128.jpg" alt="User Avatar"
-                                        class="img-size-50 img-circle mr-3">
-                                    <div class="media-body">
-                                        <h3 class="dropdown-item-title">
-                                            John Pierce
-                                            <span class="float-right text-sm text-muted"><i
-                                                    class="fas fa-star"></i></span>
-                                        </h3>
-                                        <p class="text-sm">I got your message bro</p>
-                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                                <!-- Message End -->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <!-- Message Start -->
-                                <div class="media">
-                                    <img src="dist/img/user3-128x128.jpg" alt="User Avatar"
-                                        class="img-size-50 img-circle mr-3">
-                                    <div class="media-body">
-                                        <h3 class="dropdown-item-title">
-                                            Nora Silvester
-                                            <span class="float-right text-sm text-warning"><i
-                                                    class="fas fa-star"></i></span>
-                                        </h3>
-                                        <p class="text-sm">The subject goes here</p>
-                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                    </div>
-                                </div>
-                                <!-- Message End -->
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                        </div>
-                    </li>
                     <!-- Notifications Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="badge badge-warning navbar-badge">15</span>
+                            <i class="fa fa-cog"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <span class="dropdown-item dropdown-header">15 Notifications</span>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                            <a href="{{route('AdminChangePassword')}}" class="dropdown-item">
+                                <i class="fas fa-tools mr-2"></i> Change Password
                             </a>
+                            <a class="dropdown-item"
+                                onclick="event.preventDefault();document.getElementById('from_logout').submit()"
+                                href="{{ route('logout') }}"><i class="fa fa-key mr-2"></i>Log
+                                out</a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-users mr-2"></i> 8 friend requests
-                                <span class="float-right text-muted text-sm">12 hours</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-file mr-2"></i> 3 new reports
-                                <span class="float-right text-muted text-sm">2 days</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                            <i class="fas fa-th-large"></i>
-                        </a>
                     </li>
                 </ul>
             </nav>
@@ -234,7 +118,7 @@
                             </ul>
                         </li> --}}
                             <li class="nav-item">
-                                <a href="{{route('Frontendhome')}}" class="nav-link">
+                                <a target="_blank" href="{{route('Frontendhome')}}" class="nav-link">
                                     <i class="nav-icon fas fa-th"></i>
                                     <p>
                                         Home
@@ -392,6 +276,17 @@
                                 </a>
                             </li>
                             @endcan
+                            @can('Order')
+                                
+                            <li class="nav-item">
+                                <a href="{{route('DashboardOrder')}}" class="nav-link  @yield('order_active')">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Order
+                                    </p>
+                                </a>
+                            </li>
+                            @endcan
 
                             @can('View Role')
 
@@ -461,6 +356,79 @@
 
                                 </ul>
                             </li>
+                            @can('View Deals')
+                            <li class="nav-item">
+                                <a href="{{route('deals.index')}}" class="nav-link  @yield('deal_active')">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Deals
+                                    </p>
+                                </a>
+                            </li>
+                            @endcan
+                            @if (auth()->user()->can('Setting') || auth()->user()->can('Banner') ||
+                            auth()->user()->can('About'))
+                            <li class="nav-item @yield('Site_setting_active')">
+                                <a href="#" class="nav-link @yield('site-setting_active')">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Site Setting
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                @can('Banner')
+                                    
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('SiteBanner')}}" class="nav-link @yield('banner-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Banner</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                @endcan
+                                @can('About')
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{Illuminate\Support\Facades\URL::signedRoute('SiteAbout',1)}}"
+                                            class="nav-link @yield('about-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>About</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                @endcan
+                                @can('Setting')
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('SiteFaqView')}}"
+                                            class="nav-link @yield('faq-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Faq</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{Illuminate\Support\Facades\URL::signedRoute('settings.edit',1)}}"
+                                            class="nav-link @yield('setting-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Settings</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                @endcan
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('settings.create')}}"
+                                            class="nav-link @yield('subs-active')">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Subscribers</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @endif
 
                             <li class="nav-item">
                                 <a class="nav-link"
@@ -509,7 +477,13 @@
         <script src="{{asset('backend/dist/js/adminlte.js')}}"></script>
 
         <!-- PAGE PLUGINS -->
-        <script src="https://cdn.ckeditor.com/ckeditor5/31.0.0/classic/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/ckeditor5/31.0.0/classic/ckeditor.js"></script>
+        <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
         <!-- jQuery Mapael -->
         <script src="{{asset('backend/plugins/jquery-mousewheel/jquery.mousewheel.js')}}"></script>
         <script src="{{asset('backedn/plugins/raphael/raphael.min.js')}}"></script>

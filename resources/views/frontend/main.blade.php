@@ -1,7 +1,4 @@
 @extends('frontend.master')
-@section('title')
-Home
-@endsection
 @section('meta_description')
 
 @endsection
@@ -14,14 +11,19 @@ Home
         <!-- Hero slider Active -->
         <div class="swiper-wrapper">
             <!-- Single slider item -->
+            @forelse ($banners as $banner)
+                
             <div class="hero-slide-item-2 slider-height swiper-slide d-flex bg-color1">
                 <div class="container align-self-center">
                     <div class="row">
                         <div class="col-xl-6 col-lg-5 col-md-5 col-sm-5 align-self-center sm-center-view">
                             <div class="hero-slide-content hero-slide-content-2 slider-animated-1">
-                                <span class="category">Sale 45% Off</span>
-                                <h2 class="title-1">Exclusive New<br> Offer 2021</h2>
-                                <a href="shop-left-sidebar.html" class="btn btn-lg btn-primary btn-hover-dark"> Shop
+                                @if ($banner->offer != '')
+                                    
+                                <span class="category">Sale {{$banner->offer}}% Off</span>
+                                @endif
+                                <h2 class="title-1">{{$banner->heading}}</h2>
+                                <a href="{{route('Frontendshop')}}" class="btn btn-lg btn-primary btn-hover-dark"> Shop
                                     Now <i class="fa fa-shopping-basket ml-15px" aria-hidden="true"></i></a>
                             </div>
                         </div>
@@ -29,36 +31,16 @@ Home
                             class="col-xl-6 col-lg-7 col-md-7 col-sm-7 d-flex justify-content-center position-relative">
                             <div class="show-case">
                                 <div class="hero-slide-image">
-                                    <img src="{{asset('front/assets/images/slider-image/slider-2-1.png')}}" alt="" />
+                                    <img src="{{asset('banner_image/'.$banner->banner_image)}}" alt="" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Single slider item -->
-            <div class="hero-slide-item-2 slider-height swiper-slide d-flex bg-color2">
-                <div class="container align-self-center">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-5 col-md-5 col-sm-5 align-self-center sm-center-view">
-                            <div class="hero-slide-content hero-slide-content-2 slider-animated-1">
-                                <span class="category">Sale 45% Off</span>
-                                <h2 class="title-1">Exclusive New<br> Offer 2021</h2>
-                                <a href="shop-left-sidebar.html" class="btn btn-lg btn-primary btn-hover-dark"> Shop
-                                    Now <i class="fa fa-shopping-basket ml-15px" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                        <div
-                            class="col-xl-6 col-lg-7 col-md-7 col-sm-7 d-flex justify-content-center position-relative">
-                            <div class="show-case">
-                                <div class="hero-slide-image">
-                                    <img src="{{asset('front/assets/images/slider-image/slider-2-2.png')}}" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @empty
+                
+            @endforelse
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination swiper-pagination-white"></div>
@@ -73,49 +55,6 @@ Home
 <!-- Hero/Intro Slider End -->
 
 <!-- Feature Area Srart -->
-<div class="feature-area  mt-n-65px">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <!-- single item -->
-                <div class="single-feature">
-                    <div class="feature-icon">
-                        <img src="{{asset('front/sassets/images/icons/1.png')}}" alt="">
-                    </div>
-                    <div class="feature-content">
-                        <h4 class="title">Free Shipping</h4>
-                        <span class="sub-title">Capped at $39 per order</span>
-                    </div>
-                </div>
-            </div>
-            <!-- single item -->
-            <div class="col-lg-4 col-md-6 mb-md-30px mb-lm-30px mt-lm-30px">
-                <div class="single-feature">
-                    <div class="feature-icon">
-                        <img src="{{asset('front/assets/images/icons/2.png')}}" alt="">
-                    </div>
-                    <div class="feature-content">
-                        <h4 class="title">Card Payments</h4>
-                        <span class="sub-title">12 Months Installments</span>
-                    </div>
-                </div>
-            </div>
-            <!-- single item -->
-            <div class="col-lg-4 col-md-6">
-                <div class="single-feature">
-                    <div class="feature-icon">
-                        <img src="{{asset('front/assets/images/icons/3.png')}}" alt="">
-                    </div>
-                    <div class="feature-content">
-                        <h4 class="title">Easy Returns</h4>
-                        <span class="sub-title">Shop With Confidence</span>
-                    </div>
-                </div>
-                <!-- single item -->
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Feature Area End -->
 
 <!-- Product Area Start -->
@@ -139,15 +78,6 @@ Home
                             @endif
                             @endforeach
 
-                            {{-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                    href="#tab-product--new">New</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                    href="#tab-product-men">Men</a></li>
-                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                    href="#tab-product-women">Women</a></li>
-                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                    href="#tab-product-kids">Kids</a></li> --}}
                         </ul>
                     </div>
                     <!-- Tab End -->
@@ -164,7 +94,7 @@ Home
                     <div class="tab-pane fade show active" id="tab-product--all">
                         <div class="row">
                             @foreach ($latest_products as $latest_product)
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
+                            <div class="col-lg-4 col-xl-3 col-md-6 col-6 col-sm-6  mb-4" data-aos="fade-up"
                                 data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
@@ -176,9 +106,12 @@ Home
                                         <span class="badges">
                                             @if ($latest_product->Attribute->min('sell_price') != '')
 
-                                            <span class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
+                                            <span class="sale">-{{$latest_product->Attribute->max('discount')}}%</span>
                                             @endif
+                                            @if ($loop->index+1 <= 8)
+                                                
                                             <span class="new">New</span>
+                                            @endif
                                         </span>
                                         <div class="actions">
                                             <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
@@ -216,7 +149,9 @@ Home
                                                 {{$sell_price}}
                                             </span>
                                             @else
-                                            ৳{{$regular_price}}
+                                            <span class="new">
+                                                ৳{{$regular_price}}
+                                            </span>
 
                                             @endif
                                             @if ($sell_price != '')
@@ -241,7 +176,7 @@ Home
                         <div class="row">
 
                             @foreach ($catagory->Product as $latest_product)
-                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-4" data-aos="fade-up"
+                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-6 mb-4" data-aos="fade-up"
                                 data-aos-delay="800">
                                 <!-- Single Prodect -->
                                 <div class="product">
@@ -255,7 +190,10 @@ Home
 
                                             <span class="sale">-{{$latest_product->Attribute->min('discount')}}%</span>
                                             @endif
+
+                                            @if ($loop->index+1 <= 8)
                                             <span class="new">New</span>
+                                            @endif
                                         </span>
                                         <div class="actions">
                                             <a href="{{route('SingleProductView',$latest_product->slug)}}"
@@ -313,7 +251,7 @@ Home
                     </div>
                     @endforeach
                 </div>
-                <a href="{{route('Frontendshop')}}" class="btn btn-lg btn-primary btn-hover-dark m-auto"> Load More <i
+                <a href="{{route('Frontendshop')}}" class="btn btn-lg btn-primary btn-hover-dark m-auto"> View More <i
                         class="fa fa-arrow-right ml-15px" aria-hidden="true"></i></a>
             </div>
         </div>
@@ -321,45 +259,7 @@ Home
 </div>
 <!-- Product Area End -->
 
-<!-- Banner Area Start -->
-<div class="banner-area pt-100px pb-100px plr-15px">
-    <div class="row m-0">
-        <div class="col-12 col-lg-4 mb-md-30px mb-lm-30px">
-            <div class="single-banner-2">
-                <img src="{{asset('front/assets/images/banner/4.jpg')}}" alt="">
-                <div class="item-disc">
-                    <h4 class="title">Best Collection <br>
-                        For Women</h4>
-                    <a href="shop-left-sidebar.html" class="shop-link btn btn-primary ">Shop Now <i
-                            class="fa fa-shopping-basket ml-5px" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-4 center-col mb-md-30px mb-lm-30px">
-            <div class="single-banner-2">
-                <img src="{{asset('front/assets/images/banner/5.jpg')}}" alt="">
-                <div class="item-disc">
-                    <h4 class="title">Best Collection <br>
-                        For Men</h4>
-                    <a href="shop-left-sidebar.html" class="shop-link btn btn-primary">Shop Now <i
-                            class="fa fa-shopping-basket ml-5px" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-4">
-            <div class="single-banner-2">
-                <img src="{{asset('front/assets/images/banner/6.jpg')}}" alt="">
-                <div class="item-disc">
-                    <h4 class="title">New Collection <br>
-                        For Kids</h4>
-                    <a href="shop-left-sidebar.html" class="shop-link btn btn-primary">Shop Now <i
-                            class="fa fa-shopping-basket ml-5px" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Banner Area End -->
+
 
 <!-- Product Area Start -->
 <div class="product-area pt-100px pb-100px">
@@ -393,7 +293,7 @@ Home
         <!-- Section Title & Tab End -->
 
         <div class="row">
-            <div class="col">
+            <div class="col-12">
                 <div class="tab-content top-borber">
                     <!-- 1st tab start -->
                     <div class="tab-pane fade show active" id="tab-product-all">
@@ -487,23 +387,25 @@ Home
 </div>
 <!-- Product Area End -->
 
+@if ($deals->status == 1)
 <!-- Deal Area Start -->
-<div class="deal-area deal-bg deal-bg-2" data-bg-image="assets/images/deal-img/deal-bg-2.jpg">
-    <div class="container ">
+    
+<div class="deal-area deal-bg deal-bg-2 " data-bg-image="{{asset('front/assets/images/deal-img/deal-bg-2.jpg')}}">
+    <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="deal-inner position-relative pt-100px pb-100px">
                     <div class="deal-wrapper">
-                        <span class="category">#FASHION SHOP</span>
-                        <h3 class="title">Deal Of The Day</h3>
+                        {{-- <span class="category">{{$deals->title}}</span> --}}
+                        <h3 class="title">{{$deals->title}}</h3>
                         <div class="deal-timing">
-                            <div data-countdown="2021/05/15"></div>
+                            <div data-countdown="{{$deals->expire_date}}"></div>
                         </div>
-                        <a href="shop-left-sidebar.html" class="btn btn-lg btn-primary btn-hover-dark m-auto"> Shop
+                        <a href="{{route('FrontendDeals')}}" class="btn btn-lg btn-primary btn-hover-dark m-auto"> Shop
                             Now <i class="fa fa-shopping-basket ml-15px" aria-hidden="true"></i></a>
                     </div>
                     <div class="deal-image">
-                        <img class="img-fluid" src="assets/images/deal-img/woman.png" alt="">
+                        <img class="img-fluid" src="{{asset('front/assets/images/deal-img/woman.png')}}" alt="">
                     </div>
                 </div>
             </div>
@@ -511,6 +413,7 @@ Home
     </div>
 </div>
 <!-- Deal Area End -->
+@endif
 <!--  Blog area Start -->
 <div class="main-blog-area pb-100px pt-100px">
     <div class="container">
@@ -564,54 +467,6 @@ Home
             @empty
 
             @endforelse
-            {{-- <!-- End single blog -->
-            <div class="col-lg-4 mb-md-30px mb-lm-30px">
-                <div class="single-blog ">
-                    <div class="blog-image">
-                        <a href="blog-single-left-sidebar.html"><img src="assets/images/blog-image/2.jpg"
-                                class="img-responsive w-100" alt=""></a>
-                    </div>
-                    <div class="blog-text">
-                        <div class="blog-athor-date">
-                            <a class="blog-date height-shape" href="#"><i class="fa fa-calendar" aria-hidden="true"></i>
-                                24 Aug, 2021</a>
-                            <a class="blog-mosion" href="#"><i class="fa fa-commenting" aria-hidden="true"></i> 1.5
-                                K</a>
-                        </div>
-                        <h5 class="blog-heading"><a class="blog-heading-link" href="blog-single-left-sidebar.html">It is
-                                a long established factoi
-                                ader will be distracted</a></h5>
-
-                        <a href="blog-single-left-sidebar.html" class="btn btn-primary blog-btn"> Read More<i
-                                class="fa fa-arrow-right ml-5px" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </div>
-            <!-- End single blog -->
-            <div class="col-lg-4">
-                <div class="single-blog">
-                    <div class="blog-image">
-                        <a href="blog-single-left-sidebar.html"><img src="assets/images/blog-image/3.jpg"
-                                class="img-responsive w-100" alt=""></a>
-                    </div>
-                    <div class="blog-text">
-                        <div class="blog-athor-date">
-                            <a class="blog-date height-shape" href="#"><i class="fa fa-calendar" aria-hidden="true"></i>
-                                24 Aug, 2021</a>
-                            <a class="blog-mosion" href="#"><i class="fa fa-commenting" aria-hidden="true"></i> 1.5
-                                K</a>
-                        </div>
-                        <h5 class="blog-heading"><a class="blog-heading-link"
-                                href="blog-single-left-sidebar.html">Contrary to popular belieflo
-                                lorem Ipsum is not</a></h5>
-
-
-                        <a href="blog-single-left-sidebar.html" class="btn btn-primary blog-btn"> Read More<i
-                                class="fa fa-arrow-right ml-5px" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </div> --}}
-            <!-- End single blog -->
         </div>
     </div>
 </div>
@@ -756,6 +611,16 @@ Home
 
 @section('script_js')
 <script>
+
+$("[data-countdown]").each(function () {
+        var $this = $(this),
+            finalDate = $(this).data("countdown");
+        $this.countdown(finalDate, function (event) {
+            $this.html(event.strftime('<span class="cdown day"><span class="cdown-1">%-D</span><p>Days</p></span> <span class="cdown hour"><span class="cdown-1">%-H</span><p>Hours</p></span> <span class="cdown minutes"><span class="cdown-1">%M</span> <p>Mins</p></span> <span class="cdown second"><span class="cdown-1"> %S</span> <p>Sec</p></span>'));
+        });
+    });
+
+
      @if (session('orderPlace'))
    Swal.fire(
      'Thanks',
