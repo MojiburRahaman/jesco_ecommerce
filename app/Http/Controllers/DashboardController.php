@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\Newsletter;
 use App\Models\Order_Summaries;
+use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -19,7 +23,21 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('backend.main');
+        $order = Order_Summaries::get();
+        $Blog = Blog::count();
+        $subscribes = Newsletter::count();
+        $ProductReview = ProductReview::count();
+        $product = Product::where('status', 1)->count();
+        $user = User::role('Customer')->get()->count();
+        // $user = Role::where('name', 'Customer')->count();
+        return view('backend.main', [
+            'order' => $order,
+            'Blog' => $Blog,
+            'subscribes' => $subscribes,
+            'ProductReview' => $ProductReview,
+            'product' => $product,
+            'user' => $user,
+        ]);
     }
 
     /**

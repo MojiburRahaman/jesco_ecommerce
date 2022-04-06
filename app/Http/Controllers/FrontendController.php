@@ -13,10 +13,12 @@ use App\Models\BlogReply;
 use App\Models\Catagory;
 use App\Models\Contact;
 use App\Models\Faq;
+use App\Models\Order_Summaries;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class FrontendController extends Controller
@@ -213,5 +215,30 @@ class FrontendController extends Controller
         return view('frontend.pages.faq', [
             'faqs' => Faq::latest()->get(),
         ]);
+    }
+    public function FrontendOrdeTrack()
+    {
+        return view('frontend.pages.track-order');
+    }
+    public function FrontendOrdeTrackPost(Request $request)
+    {
+        abort_if(!$request->ajax(), '404');
+        $validator = Validator::make($request->all(), [
+            'order_number' => ['required', 'numeric'],
+        ]);
+        if ($validator->passes()) {
+
+            $order =  Order_Summaries::where('order_number', $request->order_number)
+                ->with('billing_details', 'order_details.Product',)
+                ->first();
+            if ($order == '') {
+                return response()->json(['errors' => 'No Order Found ']);
+            }
+            $view = view('frontend.pages.track-order-ajax', [
+                'order' => $order,
+            ])->render();
+            return response()->json(['html' => $view]);
+        }
+        return response()->json(['errors' => $validator->errors()->all()]);
     }
 }

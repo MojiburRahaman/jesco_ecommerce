@@ -12,11 +12,11 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-12 text-center">
-                <h2 class="breadcrumb-title">{{$product->title}}</h2>
+                <h2 class="breadcrumb-title">Product</h2>
                 <!-- breadcrumb-list start -->
                 <ul class="breadcrumb-list">
                     <li class="breadcrumb-item"><a href="{{route('Frontendhome')}}">Home</a></li>
-                    <li class="breadcrumb-item active">{{$product->title}}</li>
+                    <li class="breadcrumb-item active">Product</li>
                 </ul>
                 <!-- breadcrumb-list end -->
             </div>
@@ -243,21 +243,11 @@
     <div class="container">
         <div class="description-review-wrapper">
             <div class="description-review-topbar nav">
-                <a data-bs-toggle="tab" href="#des-details2">Information</a>
                 <a class="active" data-bs-toggle="tab" href="#des-details1">Description</a>
                 <a data-bs-toggle="tab" href="#des-details3">Reviews (02)</a>
             </div>
             <div class="tab-content description-review-bottom">
-                <div id="des-details2" class="tab-pane">
-                    <div class="product-anotherinfo-wrapper text-start">
-                        <ul>
-                            <li><span>Weight</span> 400 g</li>
-                            <li><span>Dimensions</span>10 x 10 x 15 cm</li>
-                            <li><span>Materials</span> 60% cotton, 40% polyester</li>
-                            <li><span>Other Info</span> American heirloom jean shorts pug seitan letterpress</li>
-                        </ul>
-                    </div>
-                </div>
+                
                 <div id="des-details1" class="tab-pane active">
                     <div class="product-description-wrapper">
                         <p>
@@ -384,7 +374,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="section-title text-center mb-30px0px line-height-1">
+                <div class=" mb-2 section-title text-center mb-30px0px line-height-1">
                     <h2 class="title m-0">Related Products</h2>
                 </div>
             </div>

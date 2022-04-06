@@ -31,17 +31,8 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('logo/'.$site_settings->site_logo) }}">
 
 
-    <!-- vendor css (Icon Font) -->
-    <!-- <link rel="stylesheet" href="assets/css/vendor/bootstrap.bundle.min.css" />
-    <link rel="stylesheet" href="assets/css/vendor/pe-icon-7-stroke.css" />
-    <link rel="stylesheet" href="assets/css/vendor/font.awesome.css" /> -->
-
-    <!-- plugins css (All Plugins Files) -->
-    <!-- <link rel="stylesheet" href="assets/css/plugins/animate.css" />
-    <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css" />
-    <link rel="stylesheet" href="assets/css/plugins/nice-select.css" />
-    <link rel="stylesheet" href="assets/css/plugins/venobox.css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+   
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <link rel="stylesheet" href="{{asset("front/assets/css/vendor/vendor.min.css")}}" />
@@ -327,12 +318,10 @@
                                 <div class="footer-links">
                                     <div class="footer-row">
                                         <ul class="align-items-center">
-                                            <li class="li"><a class="single-link" href="#">Support
-                                                </a></li>
                                             <li class="li"><a class="single-link" href="#">Home</a></li>
                                             <li class="li"><a class="single-link" href="{{route('FrontendAbout')}}">About</a></li>
-                                            <li class="li"><a class="single-link" href="#">Blog</a></li>
                                             <li class="li"><a class="single-link" href="{{route('FrontendContact')}}">Contact Us</a></li>
+                                            <li class="li"><a class="single-link" href="{{route('FrontendOrdeTrack')}}">Track Your Order</a></li>
                                             <li class="li"><a class="single-link" href="{{route('FrontendFaQ')}}">Faq</a></li>
                                         </ul>
                                         
@@ -474,7 +463,7 @@
     <!-- Login Modal End -->
 
      <!-- Modal -->
-     <div class="modal modal-2 fade" id="exampleModal" tabindex="-1" role="dialog">
+     {{-- <div class="modal modal-2 fade" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -603,7 +592,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Modal end -->
 
     <!-- Global Vendor, plugins JS -->

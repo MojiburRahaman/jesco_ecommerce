@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-12 text-center">
-                    <h2 class="breadcrumb-title">Shop</h2>
+                    <h2 class="breadcrumb-title">Login</h2>
                     <!-- breadcrumb-list start -->
                     <ul class="breadcrumb-list">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -58,10 +58,16 @@
                             <div id="lg2" class="tab-pane">
                                 <div class="login-form-container">
                                     <div class="login-register-form">
-                                        <form action="#" method="post">
-                                            <input type="text" name="user-name" placeholder="Username" />
-                                            <input type="password" name="user-password" placeholder="Password" />
-                                            <input name="user-email" placeholder="Email" type="email" />
+                                        <form action="{{route('register.post')}}" method="post">
+                                            @csrf
+                                            <input autofocus type="text" name="name" placeholder="Username" />
+                                            <input name="email" placeholder="Email" type="email" />
+                                            <input  type="password" placeholder="Password"
+                                            name="password"
+                                            required autocomplete="new-password"  />
+                                            <input  type="password" placeholder="Confirm Password"
+                                            type="password"
+                                            name="password_confirmation" required   />
                                             <div class="button-box">
                                                 <button type="submit"><span>Register</span></button>
                                             </div>

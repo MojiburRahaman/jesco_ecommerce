@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-12 text-center">
-                <h2 class="breadcrumb-title">Shop</h2>
+                <h2 class="breadcrumb-title">Account</h2>
                 <!-- breadcrumb-list start -->
                 <ul class="breadcrumb-list">
                     <li class="breadcrumb-item"><a href="{{route('Frontendhome')}}">Home</a></li>
@@ -67,7 +67,7 @@
                     <div class="tab-pane fade show active" id="dashboard">
                         <h4>Welcome ,{{auth()->user()->name}} </h4>
                         <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent
-                                orders</a> and Edit your <a
+                                orders</a>,<a href="{{route('FrontendOrdeTrack')}}">track your order</a> and Edit your <a
                                 href="#"> password and account details.</a></p>
                     </div>
                     <div class="tab-pane fade" id="orders">
@@ -76,7 +76,7 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Order</th>
+                                        <th>Order No</th>
                                         <th>Date</th>
                                         <th>Total</th>
                                         <th>Status</th>
@@ -85,7 +85,7 @@
                                 <tbody>
                                     @forelse ($orders as $order)
                                     <tr>
-                                        <td>{{'#' .$order->order_number}}</td>
+                                        <td>{{$order->order_number}}</td>
                                         <td>{{$order->created_at->format("M d,Y")}}</td>
                                         <td> {{'৳'.$order->subtotal}} for {{$order->order__details_count}} item </td>
                                         @if ($order->delivery_status == 1)

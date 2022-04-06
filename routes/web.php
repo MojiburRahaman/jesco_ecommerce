@@ -54,6 +54,8 @@ use App\Http\Controllers\SizeController;
     Route::post('/product/get-size', [ProductViewController::class, 'GetSizeByColor'])->name('GetSizeByColor');
     Route::post('/product/get-pricebysize', [ProductViewController::class, 'GetPriceBySize'])->name('GetPriceBySize');
     Route::get('/shop', [FrontendController::class, 'Frontendshop'])->name('Frontendshop');
+    Route::get('/track-order', [FrontendController::class, 'FrontendOrdeTrack'])->name('FrontendOrdeTrack');
+    Route::post('/track-order/post', [FrontendController::class, 'FrontendOrdeTrackPost'])->name('FrontendOrdeTrackPost');
 
     // blog route
     Route::get('/blogs', [FrontendController::class, 'Frontendblog'])->name('Frontendblog');
@@ -176,15 +178,6 @@ use App\Http\Controllers\SizeController;
 
 
     });
-
-
-
-
-
-
-
-
-
 
 
 
